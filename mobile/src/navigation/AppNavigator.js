@@ -1,28 +1,32 @@
-import React, { useContext } from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
-import { NavigationContainer } from '@react-navigation/native';
-import { AuthContext } from '../context/AuthContext';
-import AuthNavigator from './AuthNavigator';
-import UsersNavigator from './UsersNavigator';
-import EventsNavigator from './EventsNavigator';
-import NotificationsNavigator from './NotificationsNavigator';
-import ContactsNavigator from './ContactsNavigator';
+import React, { useContext } from "react";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import { AuthContext } from "../context/AuthContext";
+
+// Navigators
+import AuthNavigator from "./AuthNavigator";
+import StudentNavigator from "./StudentNavigator";
+import ProviderNavigator from "./ProviderNavigator";
 
 const RootStack = createStackNavigator();
 
 const AppNavigator = () => {
-  // Uncomment when you use auth:
-  // const { user, isLoading } = useContext(AuthContext);
-  // if (isLoading) return null;
+  const { userToken, userData, isLoading } = useContext(AuthContext);
+
+  if (isLoading) {
+    return null; // OR show a splash/loading screen
+  }
 
   return (
     <NavigationContainer>
       <RootStack.Navigator screenOptions={{ headerShown: false }}>
-        <RootStack.Screen name="Auth" component={AuthNavigator} />
-        <RootStack.Screen name="Users" component={UsersNavigator} />
-        <RootStack.Screen name="Events" component={EventsNavigator} />
-        <RootStack.Screen name="Notifications" component={NotificationsNavigator} />
-        <RootStack.Screen name="Contacts" component={ContactsNavigator} />
+        {!userToken ? (
+          <RootStack.Screen name="Auth" component={AuthNavigator} />
+        ) : userData?.role === "provider" ? (
+          <RootStack.Screen name="Provider" component={ProviderNavigator} />
+        ) : (
+          <RootStack.Screen name="Student" component={StudentNavigator} />
+        )}
       </RootStack.Navigator>
     </NavigationContainer>
   );

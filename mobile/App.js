@@ -33,7 +33,7 @@ const App = () => {
               translucent={true}
             />
             <AppNavigator />
-          </NotificationProvider>
+          </NotificationProvider> 
         </EventProvider>
       </AuthProvider>
     </ThemeProvider>
