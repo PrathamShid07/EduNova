@@ -13,7 +13,7 @@ export const NotificationProvider = ({ children }) => {
       // Replace with your actual API call
       const response = await fetch('your-api-endpoint/notifications');
       const data = await response.json();
-      
+
       setNotifications({
         currentValue: data,
         unreadCount: data.filter(n => !n.read).length

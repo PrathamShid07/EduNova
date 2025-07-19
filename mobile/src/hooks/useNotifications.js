@@ -1,56 +1,69 @@
 import { useState, useEffect, useContext } from 'react';
-import NotificationContext from '../context/NotificationContext';
+import { EventContext } from '../context/EventContext';
 import api from '../services/api';
 
-export const useNotifications = () => {
+export const useEvents = () => {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  const { notifications, setNotifications } = useContext(NotificationContext);
+  const { events, setEvents } = useContext(EventContext);
 
-  const fetchNotifications = async (refresh = false) => {
+  const fetchEvents = async (refresh = false) => {
     refresh ? setRefreshing(true) : setLoading(true);
     try {
-      const response = await api.get('/notifications');
-      setNotifications(response.data);
+      const response = await api.get('/events');
+
+      // Handle both direct array or nested data structure
+      const fetchedEvents = Array.isArray(response.data)
+        ? response.data
+        : Array.isArray(response.data.data)
+          ? response.data.data
+          : [];
+
+      setEvents(fetchedEvents);
     } catch (error) {
-      console.error('Failed to fetch notifications:', error);
+      console.error('Failed to fetch events:', error);
+      setEvents([]); // fallback to empty array to avoid crash
     } finally {
       refresh ? setRefreshing(false) : setLoading(false);
     }
   };
 
-  const markAsRead = async (notificationId) => {
+  const createEvent = async (eventData) => {
     try {
-      await api.patch(`/notifications/${notificationId}/read`);
-      setNotifications(notifications.map(notification => 
-        notification.id === notificationId 
-          ? { ...notification, read: true } 
-          : notification
-      ));
+      const response = await api.post('/events', eventData);
+      setEvents([...events, response.data]);
+      return response.data;
     } catch (error) {
-      console.error('Failed to mark as read:', error);
+      console.error('Failed to create event:', error);
+      throw error;
     }
   };
 
-  const deleteNotification = async (notificationId) => {
+  const registerForEvent = async (eventId) => {
     try {
-      await api.delete(`/notifications/${notificationId}`);
-      setNotifications(notifications.filter(n => n.id !== notificationId));
+      await api.post(`/events/${eventId}/register`);
+      const updatedEvents = events.map(event =>
+        event.id === eventId
+          ? { ...event, isRegistered: true, attendees: event.attendees + 1 }
+          : event
+      );
+      setEvents(updatedEvents);
     } catch (error) {
-      console.error('Failed to delete notification:', error);
+      console.error('Registration failed:', error);
+      throw error;
     }
   };
 
   useEffect(() => {
-    fetchNotifications();
-  });
+    fetchEvents();
+  }, []); // <- added dependency array
 
-  return { 
-    notifications, 
-    loading, 
-    refreshing, 
-    fetchNotifications, 
-    markAsRead, 
-    deleteNotification 
+  return {
+    events: Array.isArray(events) ? events : [],
+    loading,
+    refreshing,
+    fetchEvents,
+    createEvent,
+    registerForEvent
   };
 };

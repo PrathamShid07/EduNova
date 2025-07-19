@@ -1,6 +1,6 @@
 import { useState, useContext } from 'react';
 import { Alert } from 'react-native';
-import AuthContext from '../context/AuthContext';
+import { AuthContext } from '../context/AuthContext';
 import api from '../services/api';
 
 export const useAuth = () => {
