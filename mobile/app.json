@@ -1,0 +1,7 @@
+{
+  "expo": {
+    "packagerOpts": {
+      "assetExts": ["jpg", "png", "jpeg", "gif"]
+    }
+  }
+}

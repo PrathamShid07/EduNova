@@ -16,5 +16,10 @@
   "bugs": {
     "url": "https://github.com/PrathamShid07/EduNova/issues"
   },
-  "homepage": "https://github.com/PrathamShid07/EduNova#readme"
+  "homepage": "https://github.com/PrathamShid07/EduNova#readme",
+  "dependencies": {
+    "react-native-paper": "^5.14.5",
+    "react-native-safe-area-context": "^5.5.2",
+    "styled-components": "^6.1.19"
+  }
 }
