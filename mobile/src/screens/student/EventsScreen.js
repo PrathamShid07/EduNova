@@ -261,9 +261,9 @@ const LoadingText = styled.Text`
   margin-top: 16px;
 `;
 
-const RotatingIcon = styled(Ionicons)`
-  transform: ${props => `rotate(${props.rotation || 0}deg)`};
-`;
+// const RotatingIcon = styled(Ionicons)`
+//   transform: ${props => rotate(${ props.rotation || 0 }, deg)};
+// `;
 
 const LoadingSpinner = () => {
   const [rotation, setRotation] = React.useState(0);
@@ -295,75 +295,76 @@ const EventsScreen = ({ navigation }) => {
   const [events, setEvents] = React.useState([
     {
       id: '1',
-      title: 'Mars Exploration Workshop',
-      description: 'Interactive workshop on Mars rover technology and future missions to the Red Planet.',
+      title: 'Webinar on Real-World Data Science Applications',
+      description: 'Join our experts as they walk you through practical applications of data science in industries like healthcare, finance, and e-commerce.',
       date: '2025-08-15',
       time: '14:00',
-      location: 'Space Center Auditorium',
-      category: 'workshop',
+      location: 'Online via Zoom',
+      category: 'webinar',
       attendees: 45,
-      maxAttendees: 60,
-      price: 25,
-      image: 'https://images.unsplash.com/photo-1614728263952-84ea256f9679?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80',
-      organizer: 'Dr. Mars Explorer',
+      maxAttendees: 100,
+      price: 0,
+      image: 'https://lsmt.org.uk/_next/image?url=https%3A%2F%2Fadmin.lsmt.org.uk%2Fuploads%2Fimages-admin%2Fblogs%2F1752060948_3425.png&w=2048&q=75',
+      organizer: 'DataSci Network',
     },
     {
       id: '2',
-      title: 'Asteroid Mining Seminar',
-      description: 'Learn about the future of space mining and asteroid resource extraction technologies.',
+      title: 'Workshop: Building a Cybersecurity Aware Web App',
+      description: 'Hands-on workshop focusing on secure coding practices and how to prevent common web vulnerabilities using OWASP guidelines.',
       date: '2025-08-20',
       time: '10:00',
-      location: 'Virtual Event',
-      category: 'seminar',
-      attendees: 120,
-      maxAttendees: 200,
-      price: 0,
-      image: 'https://images.unsplash.com/photo-1581833971358-2c8b550f87b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80',
-      organizer: 'Prof. Space Mining',
+      location: 'TechLab Building, Room 204',
+      category: 'workshop',
+      attendees: 60,
+      maxAttendees: 80,
+      price: 20,
+      image: 'https://www.webasha.com/uploads/course/slider_images/65d9ddd25468a1708776914.cyber-security-training.jpg',
+      organizer: 'SecureWeb Initiative',
     },
     {
       id: '3',
-      title: 'Galaxy Photography Masterclass',
-      description: 'Professional techniques for capturing stunning images of distant galaxies and nebulae.',
+      title: 'Masterclass: Deploying Scalable AI Models',
+      description: 'A professional deep dive into best practices for training and deploying machine learning models at scale using cloud platforms.',
       date: '2025-07-10',
       time: '19:00',
-      location: 'Observatory Dome',
+      location: 'AI Innovation Hub, Pune',
       category: 'masterclass',
-      attendees: 25,
-      maxAttendees: 25,
-      price: 50,
-      image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80',
-      organizer: 'Dr. Stargazer',
+      attendees: 40,
+      maxAttendees: 50,
+      price: 30,
+      image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSNAkMTXEIu6N8pERz9QJO512NE7Iu0ruMBMQ&s',
+      organizer: 'ML Engineers Guild',
     },
     {
       id: '4',
-      title: 'Space Station Virtual Tour',
-      description: 'Exclusive virtual reality tour of the International Space Station with astronaut Q&A.',
+      title: 'Virtual Tour: Behind the Scenes of a Fintech Startup',
+      description: 'Explore how modern fintech companies operate, from backend architecture to payment security, with a live Q&A from the team.',
       date: '2025-08-25',
       time: '16:00',
-      location: 'VR Experience Center',
+      location: 'Virtual Reality Center',
       category: 'tour',
       attendees: 30,
-      maxAttendees: 50,
-      price: 15,
-      image: 'https://images.unsplash.com/photo-1446776653964-20c1d3a81b06?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80',
-      organizer: 'NASA Outreach',
+      maxAttendees: 60,
+      price: 10,
+      image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKjuxXopJZZLk3nnck8Q9VITPiY_bMv-rQuqK8Wfq9_-59QkzBG0f1FfBhmUapQkZXy2s&usqp=CAU',
+      organizer: 'FinTech Founders Club',
     },
     {
       id: '5',
-      title: 'Rocket Launch Viewing Party',
-      description: 'Watch the latest SpaceX launch with fellow space enthusiasts and expert commentary.',
+      title: 'Showcase: Blockchain Projects by Final Year Students',
+      description: 'A demonstration of innovative blockchain solutions for voting systems, academic credentials, and supply chain management by engineering students.',
       date: '2025-08-30',
       time: '06:00',
-      location: 'Launch Viewing Area',
+      location: 'College Auditorium',
       category: 'event',
-      attendees: 85,
+      attendees: 75,
       maxAttendees: 100,
-      price: 10,
-      image: 'https://images.unsplash.com/photo-1517976487492-5750f3195933?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80',
-      organizer: 'Space Enthusiasts Club',
+      price: 0,
+      image: 'https://crypto-economy.com//wp-content/uploads/2017/12/blockchanin-1024x576.jpg',
+      organizer: 'Department of Computer Engineering, VJTI',
     }
   ]);
+
 
   const [user, setUser] = React.useState({ role: 'user' });
   const [loading, setLoading] = React.useState(false);
@@ -565,7 +566,7 @@ const EventsScreen = ({ navigation }) => {
               <AttendeesText>{item.attendees}/{item.maxAttendees}</AttendeesText>
             </AttendeesInfo>
             <PriceText isFree={item.price === 0}>
-              {item.price === 0 ? 'FREE' : `$${item.price}`}
+              {/* {item.price === 0 ? 'FREE' : $${item.price}} */}
             </PriceText>
           </EventFooter>
 

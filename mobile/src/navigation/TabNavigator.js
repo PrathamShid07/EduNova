@@ -4,7 +4,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import HomeScreen from '../screens/student/HomeScreen';
 import EventsScreen from '../screens/student/EventsScreen';
 import ProfileScreen from '../screens/student/ProfileScreen';
-import ContactsScreen from '../screens/provider/ContactsScreen';
+// import ContactsScreen from '../screens/provider/ContactsScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -43,7 +43,7 @@ const TabNavigator = () => (
   >
     <Tab.Screen name="Home" component={HomeScreen} options={{ title: 'Explore' }} />
     <Tab.Screen name="Events" component={EventsScreen} options={{ title: 'My Events' }} />
-    <Tab.Screen name="Contact" component={ContactsScreen} options={{ title: 'Contacts' }} />
+    <Tab.Screen name="Profile" component={ProfileScreen} options={{ title: 'Profile' }} />
   </Tab.Navigator>
 );
 

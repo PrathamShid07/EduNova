@@ -12,45 +12,45 @@ const HomeScreen = () => {
     {
       id: '1',
       title: 'Introduction to Astrophysics',
-      instructor: 'Dr. Neil Cosmos',
+      instructor: 'Dr. Neil Jonas',
       duration: '4 weeks',
       price: '$99',
       rating: 4.8,
       students: 1250,
-      image: 'https://images.unsplash.com/photo-1446941611759-9d0d7e40c318?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80',
+      image: 'https://images.careerindia.com/img/2017/03/26-astronomycourse-23-1490266933.jpg',
       difficulty: 'Beginner',
     },
     {
       id: '2',
       title: 'Quantum Mechanics Basics',
-      instructor: 'Prof. Quantum Leap',
+      instructor: 'Prof. John Leap',
       duration: '6 weeks',
       price: '$129',
       rating: 4.9,
       students: 850,
-      image: 'https://images.unsplash.com/photo-1617791160505-6f00504e3519?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80',
+      image: 'https://online.stanford.edu/sites/default/files/styles/card_header/public/2018-04/electrical-engineering-applied-quantum-mechanics_ee222.jpg?h=66807ab2&itok=KmFrPPKh',
       difficulty: 'Intermediate',
     },
     {
       id: '3',
-      title: 'Galactic Exploration',
-      instructor: 'Dr. Starry Night',
+      title: 'Data Science',
+      instructor: 'Prof. Mukesh',
       duration: '5 weeks',
       price: '$89',
       rating: 4.7,
       students: 920,
-      image: 'https://images.unsplash.com/photo-1506702315530-c7f8f0430d4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80',
+      image: 'https://www.oxfordinstitute.in/img/data-science-course.jpg',
       difficulty: 'Beginner',
     },
     {
       id: '4',
-      title: 'Space Engineering Fundamentals',
-      instructor: 'Dr. Rocket Science',
+      title: 'Machine Learning Fundamentals',
+      instructor: 'Dr. Lalita',
       duration: '8 weeks',
       price: '$159',
       rating: 4.6,
       students: 650,
-      image: 'https://images.unsplash.com/photo-1581833971358-2c8b550f87b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80',
+      image: 'https://img.evbuc.com/https%3A%2F%2Fcdn.evbuc.com%2Fimages%2F762927919%2F1221918410073%2F1%2Foriginal.20240508-193018?w=600&auto=format%2Ccompress&q=75&sharp=10&rect=0%2C44%2C1400%2C700&s=5f04da72028e4f9ac261f7619443b6ea',
       difficulty: 'Advanced',
     },
   ];
@@ -59,33 +59,33 @@ const HomeScreen = () => {
   const ongoingCourses = [
     {
       id: '5',
-      title: 'Stellar Dynamics',
-      instructor: 'Dr. Orbit Smith',
+      title: 'Cyber Security',
+      instructor: 'Prof. Alex Smith',
       progress: 60,
       totalLessons: 24,
       completedLessons: 14,
-      image: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80',
-      nextLesson: 'Orbital Mechanics',
+      image: 'https://media.licdn.com/dms/image/v2/D4D12AQF7A0bqGYMj0A/article-cover_image-shrink_720_1280/article-cover_image-shrink_720_1280/0/1733136423495?e=2147483647&v=beta&t=GnQ8yuIoj6U5PB0Ib9BekWLUGgZoOafcfBMpeJH8ZE8',
+      nextLesson: 'Data Analytics',
     },
     {
       id: '6',
-      title: 'Cosmology 101',
-      instructor: 'Prof. Galaxy Jones',
+      title: 'Data Analysis',
+      instructor: 'Prof. Jones',
       progress: 25,
       totalLessons: 20,
       completedLessons: 5,
-      image: 'https://images.unsplash.com/photo-1538370965046-79c0d6907d47?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80',
-      nextLesson: 'Dark Matter Theory',
+      image: 'https://www.oxfordinstitute.in/img/all-software-development/data-analayes.jpg',
+      nextLesson: 'Business Management',
     },
     {
       id: '7',
-      title: 'Planetary Science',
-      instructor: 'Dr. Mars Explorer',
+      title: 'Ethical Hacking',
+      instructor: 'Prof. Mathew',
       progress: 80,
       totalLessons: 16,
       completedLessons: 13,
-      image: 'https://images.unsplash.com/photo-1614728423169-3f65fd722526?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80',
-      nextLesson: 'Exoplanet Discovery',
+      image: 'https://thedigitaladda.com/wp-content/uploads/Ethical-Hacking-Course-Training-in-Jalandhar.png',
+      nextLesson: 'MERN Stack',
     },
   ];
 
@@ -97,7 +97,7 @@ const HomeScreen = () => {
     { id: '4', name: 'Cosmology', icon: 'infinite', courses: 19, color: '#96CEB4' },
   ];
 
-  // Sidebar navigation options
+  // Sidebar navigation options - Updated Profile navigation
   const sidebarOptions = [
     { name: 'My Courses', screen: 'MyCourses', icon: 'book' },
     { name: 'Profile', screen: 'Profile', icon: 'person' },
@@ -215,11 +215,13 @@ const HomeScreen = () => {
     </TouchableOpacity>
   );
 
+  // Updated renderSidebarOption to handle ProfileScreen navigation
   const renderSidebarOption = ({ item }) => (
     <TouchableOpacity
       style={[styles.sidebarItem, { backgroundColor: colors.cardBackground }]}
       onPress={() => {
         setSidebarVisible(false);
+        // Navigate to the ProfileScreen
         navigation.navigate(item.screen);
       }}
     >
@@ -243,7 +245,10 @@ const HomeScreen = () => {
             <Text style={[styles.headerTitle, { color: colors.text }]}>Space Academy</Text>
             <Text style={[styles.headerSubtitle, { color: colors.textSecondary }]}>Explore the Universe</Text>
           </View>
-          <TouchableOpacity style={styles.notificationButton}>
+          <TouchableOpacity
+            style={styles.notificationButton}
+            onPress={() => navigation.navigate('Notifications')}
+          >
             <Ionicons name="notifications-outline" size={24} color={colors.accent} />
             <View style={styles.notificationBadge} />
           </TouchableOpacity>
@@ -375,11 +380,12 @@ const styles = StyleSheet.create({
   },
   notificationButton: {
     position: 'relative',
+    padding: 8, // Added padding for better touch area
   },
   notificationBadge: {
     position: 'absolute',
-    top: -2,
-    right: -2,
+    top: 6, // Adjusted position due to padding
+    right: 6, // Adjusted position due to padding
     width: 8,
     height: 8,
     borderRadius: 4,
