@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -34,6 +34,23 @@ const SettingsScreen = () => {
     warning: "#FF9800",
     border: "#333333",
   };
+
+  // Fixed the header configuration with useEffect
+  useEffect(() => {
+    navigation.setOptions({
+      title: "Settings",
+      headerStyle: {
+        backgroundColor: colors.background,
+      },
+      headerTintColor: colors.accent,
+      headerTitleStyle: {
+        color: colors.text,
+        fontSize: 20,
+        fontWeight: "bold",
+      },
+      headerTitleAlign: "center",
+    });
+  }, [navigation]);
 
   const settingSections = [
     {
@@ -217,31 +234,16 @@ const SettingsScreen = () => {
     },
   ];
 
-  const renderSettingItem = (item, index) => {
+  const renderSettingItem = (item, index, sectionItems) => {
     return (
       <TouchableOpacity
-        key={`setting-${index}`}
+        key={`${item.title}-${index}`} // ✅ Corrected key syntax
         style={[
           styles.settingItem,
           {
             backgroundColor: colors.cardBackground,
             borderColor: colors.border,
-            // Remove border from last item
-            borderBottomWidth:
-              (index ===
-                settingSections.findIndex((section) =>
-                  section.items.includes(item)
-                )) ===
-                settingSections.length - 1 &&
-              index ===
-                settingSections[
-                  settingSections.findIndex((section) =>
-                    section.items.includes(item)
-                  )
-                ].items.length -
-                  1
-                ? 0
-                : 1,
+            borderBottomWidth: index === sectionItems.length - 1 ? 0 : 1,
           },
         ]}
         onPress={item.onPress}
@@ -290,7 +292,9 @@ const SettingsScreen = () => {
 
   const renderSection = (section, sectionIndex) => {
     return (
-      <View key={`section-${sectionIndex}`} style={styles.section}>
+      <View key={`${section.title}-${sectionIndex}`} style={styles.section}>
+        {" "}
+        {/* ✅ Corrected key syntax */}
         <Text style={[styles.sectionTitle, { color: colors.text }]}>
           {section.title}
         </Text>
@@ -301,7 +305,7 @@ const SettingsScreen = () => {
           ]}
         >
           {section.items.map((item, itemIndex) =>
-            renderSettingItem(item, itemIndex)
+            renderSettingItem(item, itemIndex, section.items)
           )}
         </View>
       </View>
@@ -312,37 +316,7 @@ const SettingsScreen = () => {
     <SafeAreaView
       style={[styles.container, { backgroundColor: colors.background }]}
     >
-      {/* Header */}
-      <View style={[styles.header, { borderBottomColor: colors.border }]}>
-        <TouchableOpacity
-          style={[
-            styles.backButton,
-            { backgroundColor: colors.cardBackground },
-          ]}
-          onPress={() => {
-            try {
-              navigation.goBack();
-            } catch (error) {
-              console.log("Navigation error:", error);
-            }
-          }}
-        >
-          <Ionicons name="arrow-back" size={24} color={colors.accent} />
-        </TouchableOpacity>
-
-        <View style={styles.headerCenter}>
-          <Text style={[styles.headerTitle, { color: colors.text }]}>
-            Settings
-          </Text>
-          <Text
-            style={[styles.headerSubtitle, { color: colors.textSecondary }]}
-          >
-            Customize your experience
-          </Text>
-        </View>
-
-        <View style={styles.headerRight} />
-      </View>
+      {/* Settings Content */}
 
       {/* Settings Content */}
       <ScrollView
@@ -400,25 +374,7 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
     borderBottomWidth: 1,
   },
-  backButton: {
-    borderRadius: 12,
-    padding: 12,
-  },
-  headerCenter: {
-    flex: 1,
-    alignItems: "center",
-  },
-  headerTitle: {
-    fontSize: 22,
-    fontWeight: "bold",
-  },
-  headerSubtitle: {
-    fontSize: 12,
-    marginTop: 2,
-  },
-  headerRight: {
-    width: 48, // Same width as back button for centering
-  },
+
   scrollView: {
     flex: 1,
   },

@@ -4,9 +4,11 @@ import TabNavigator from "./TabNavigator";
 import EventDetailScreen from "../screens/student/EventDetailScreen";
 import ProvidersScreen from "../screens/student/ProvidersScreen";
 import NotificationsScreen from "../screens/student/NotificationsScreen";
-import MyCoursesScreen from "../screens/student/MyCourses"; // Add this import
-import CertificatesScreen from "../screens/student/CertificatesScreen"; // Add CertificateScreen import
-import SettingsScreen from "../screens/student/SettingsScreen"; // Add SettingsScreen import
+import MyCoursesScreen from "../screens/student/MyCourses";
+import CertificatesScreen from "../screens/student/CertificatesScreen";
+import SettingsScreen from "../screens/student/SettingsScreen";
+import AnalyticsScreen from "../screens/student/AnalyticsScreen"; // Add AnalyticsScreen import
+import CybersecurityScreen from "../screens/student/CybersecurityScreen"; // Add CybersecurityScreen import
 
 const Stack = createStackNavigator();
 
@@ -79,6 +81,26 @@ const StudentNavigator = () => (
           backgroundColor: "#000033",
         },
         headerTintColor: "#fff",
+      }}
+    />
+    {/* Add AnalyticsScreen to the navigator */}
+    <Stack.Screen
+      name="Analytics"
+      component={AnalyticsScreen}
+      options={{
+        title: "Analytics",
+        headerStyle: {
+          backgroundColor: "#000033",
+        },
+        headerTintColor: "#fff",
+      }}
+    />
+    {/* Add CybersecurityScreen to the navigator */}
+    <Stack.Screen
+      name="CybersecurityScreen"
+      component={CybersecurityScreen}
+      options={{
+        headerShown: false, // Since CybersecurityScreen has its own custom header
       }}
     />
   </Stack.Navigator>

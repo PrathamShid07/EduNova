@@ -7,7 +7,6 @@ import {
   FlatList,
   Image,
   SafeAreaView,
-  ScrollView,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
@@ -428,7 +427,7 @@ const MyCoursesScreen = () => {
     <SafeAreaView
       style={[styles.container, { backgroundColor: colors.background }]}
     >
-      {/* Header */}
+      {/* Single Header - Fixed */}
       <View style={styles.header}>
         <TouchableOpacity
           style={[
@@ -457,42 +456,45 @@ const MyCoursesScreen = () => {
         </TouchableOpacity>
       </View>
 
-      {/* Tab Navigation */}
+      {/* Tab Navigation - Fixed position */}
       <View style={styles.tabContainer}>
         {renderTabButton("ongoing", "Ongoing", ongoingCourses.length)}
         {renderTabButton("completed", "Completed", completedCourses.length)}
         {renderTabButton("wishlist", "Wishlist", wishlistCourses.length)}
       </View>
 
-      {/* Content */}
-      <FlatList
-        data={getCurrentData()}
-        renderItem={getCurrentRenderItem()}
-        keyExtractor={(item) => item.id}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.listContainer}
-        ListEmptyComponent={
-          <View style={styles.emptyContainer}>
-            <Ionicons
-              name="school-outline"
-              size={64}
-              color={colors.textSecondary}
-            />
-            <Text style={[styles.emptyTitle, { color: colors.text }]}>
-              No courses found
-            </Text>
-            <Text
-              style={[styles.emptySubtitle, { color: colors.textSecondary }]}
-            >
-              {selectedTab === "ongoing"
-                ? "Start your learning journey by enrolling in courses"
-                : selectedTab === "completed"
-                ? "Complete some courses to see them here"
-                : "Add courses to your wishlist to see them here"}
-            </Text>
-          </View>
-        }
-      />
+      {/* Content with proper scrolling */}
+      <View style={styles.contentContainer}>
+        <FlatList
+          data={getCurrentData()}
+          renderItem={getCurrentRenderItem()}
+          keyExtractor={(item) => item.id}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.listContainer}
+          bounces={true}
+          ListEmptyComponent={
+            <View style={styles.emptyContainer}>
+              <Ionicons
+                name="school-outline"
+                size={64}
+                color={colors.textSecondary}
+              />
+              <Text style={[styles.emptyTitle, { color: colors.text }]}>
+                No courses found
+              </Text>
+              <Text
+                style={[styles.emptySubtitle, { color: colors.textSecondary }]}
+              >
+                {selectedTab === "ongoing"
+                  ? "Start your learning journey by enrolling in courses"
+                  : selectedTab === "completed"
+                  ? "Complete some courses to see them here"
+                  : "Add courses to your wishlist to see them here"}
+              </Text>
+            </View>
+          }
+        />
+      </View>
     </SafeAreaView>
   );
 };
@@ -508,6 +510,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingTop: 10,
     paddingBottom: 20,
+    zIndex: 10,
   },
   backButton: {
     borderRadius: 12,
@@ -532,7 +535,8 @@ const styles = StyleSheet.create({
   tabContainer: {
     flexDirection: "row",
     paddingHorizontal: 20,
-    marginBottom: 20,
+    marginBottom: 10,
+    zIndex: 5,
   },
   tabButton: {
     flex: 1,
@@ -547,9 +551,14 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "600",
   },
+  contentContainer: {
+    flex: 1,
+  },
   listContainer: {
     paddingHorizontal: 20,
-    paddingBottom: 20,
+    paddingTop: 10,
+    paddingBottom: 30,
+    flexGrow: 1,
   },
   courseCard: {
     borderRadius: 16,
@@ -727,6 +736,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     paddingTop: 60,
+    minHeight: 300,
   },
   emptyTitle: {
     fontSize: 20,

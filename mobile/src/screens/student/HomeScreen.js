@@ -1,7 +1,21 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, FlatList, Image, SafeAreaView, Modal, ScrollView } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  FlatList,
+  Image,
+  SafeAreaView,
+  Modal,
+  ScrollView,
+  Platform,
+  Dimensions,
+} from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
+
+const { width } = Dimensions.get("window");
 
 const HomeScreen = () => {
   const navigation = useNavigation();
@@ -10,194 +24,323 @@ const HomeScreen = () => {
   // Enhanced recommended courses with better visibility
   const recommendedCourses = [
     {
-      id: '1',
-      title: 'Introduction to Astrophysics',
-      instructor: 'Dr. Neil Jonas',
-      duration: '4 weeks',
-      price: '$99',
+      id: "1",
+      title: "Introduction to Astrophysics",
+      instructor: "Dr. Neil Jonas",
+      duration: "4 weeks",
+      price: "$99",
       rating: 4.8,
       students: 1250,
-      image: 'https://images.careerindia.com/img/2017/03/26-astronomycourse-23-1490266933.jpg',
-      difficulty: 'Beginner',
+      image:
+        "https://images.careerindia.com/img/2017/03/26-astronomycourse-23-1490266933.jpg",
+      difficulty: "Beginner",
+      screenName: "CourseDetails",
     },
     {
-      id: '2',
-      title: 'Quantum Mechanics Basics',
-      instructor: 'Prof. John Leap',
-      duration: '6 weeks',
-      price: '$129',
+      id: "2",
+      title: "Quantum Mechanics Basics",
+      instructor: "Prof. John Leap",
+      duration: "6 weeks",
+      price: "$129",
       rating: 4.9,
       students: 850,
-      image: 'https://online.stanford.edu/sites/default/files/styles/card_header/public/2018-04/electrical-engineering-applied-quantum-mechanics_ee222.jpg?h=66807ab2&itok=KmFrPPKh',
-      difficulty: 'Intermediate',
+      image:
+        "https://online.stanford.edu/sites/default/files/styles/card_header/public/2018-04/electrical-engineering-applied-quantum-mechanics_ee222.jpg?h=66807ab2&itok=KmFrPPKh",
+      difficulty: "Intermediate",
+      screenName: "CourseDetails",
     },
     {
-      id: '3',
-      title: 'Data Science',
-      instructor: 'Prof. Mukesh',
-      duration: '5 weeks',
-      price: '$89',
+      id: "3",
+      title: "Data Science",
+      instructor: "Prof. Mukesh",
+      duration: "5 weeks",
+      price: "$89",
       rating: 4.7,
       students: 920,
-      image: 'https://www.oxfordinstitute.in/img/data-science-course.jpg',
-      difficulty: 'Beginner',
+      image: "https://www.oxfordinstitute.in/img/data-science-course.jpg",
+      difficulty: "Beginner",
+      screenName: "CourseDetails",
     },
     {
-      id: '4',
-      title: 'Machine Learning Fundamentals',
-      instructor: 'Dr. Lalita',
-      duration: '8 weeks',
-      price: '$159',
+      id: "4",
+      title: "Machine Learning Fundamentals",
+      instructor: "Dr. Lalita",
+      duration: "8 weeks",
+      price: "$159",
       rating: 4.6,
       students: 650,
-      image: 'https://img.evbuc.com/https%3A%2F%2Fcdn.evbuc.com%2Fimages%2F762927919%2F1221918410073%2F1%2Foriginal.20240508-193018?w=600&auto=format%2Ccompress&q=75&sharp=10&rect=0%2C44%2C1400%2C700&s=5f04da72028e4f9ac261f7619443b6ea',
-      difficulty: 'Advanced',
+      image:
+        "https://img.evbuc.com/https%3A%2F%2Fcdn.evbuc.com%2Fimages%2F762927919%2F1221918410073%2F1%2Foriginal.20240508-193018?w=600&auto=format%2Ccompress&q=75&sharp=10&rect=0%2C44%2C1400%2C700&s=5f04da72028e4f9ac261f7619443b6ea",
+      difficulty: "Advanced",
+      screenName: "CourseDetails",
     },
   ];
 
-  // Enhanced ongoing courses
+  // Enhanced ongoing courses with specific screen navigation
   const ongoingCourses = [
     {
-      id: '5',
-      title: 'Cyber Security',
-      instructor: 'Prof. Alex Smith',
+      id: "5",
+      title: "Cyber Security",
+      instructor: "Prof. Alex Smith",
       progress: 60,
       totalLessons: 24,
       completedLessons: 14,
-      image: 'https://media.licdn.com/dms/image/v2/D4D12AQF7A0bqGYMj0A/article-cover_image-shrink_720_1280/article-cover_image-shrink_720_1280/0/1733136423495?e=2147483647&v=beta&t=GnQ8yuIoj6U5PB0Ib9BekWLUGgZoOafcfBMpeJH8ZE8',
-      nextLesson: 'Data Analytics',
+      image:
+        "https://media.licdn.com/dms/image/v2/D4D12AQF7A0bqGYMj0A/article-cover_image-shrink_720_1280/article-cover_image-shrink_720_1280/0/1733136423495?e=2147483647&v=beta&t=GnQ8yuIoj6U5PB0Ib9BekWLUGgZoOafcfBMpeJH8ZE8",
+      nextLesson: "Data Analytics",
+      screenName: "CybersecurityScreen", // This is the key fix
     },
     {
-      id: '6',
-      title: 'Data Analysis',
-      instructor: 'Prof. Jones',
+      id: "6",
+      title: "Data Analysis",
+      instructor: "Prof. Jones",
       progress: 25,
       totalLessons: 20,
       completedLessons: 5,
-      image: 'https://www.oxfordinstitute.in/img/all-software-development/data-analayes.jpg',
-      nextLesson: 'Business Management',
+      image:
+        "https://www.oxfordinstitute.in/img/all-software-development/data-analayes.jpg",
+      nextLesson: "Business Management",
+      screenName: "CourseDetails",
     },
     {
-      id: '7',
-      title: 'Ethical Hacking',
-      instructor: 'Prof. Mathew',
+      id: "7",
+      title: "Ethical Hacking",
+      instructor: "Prof. Mathew",
       progress: 80,
       totalLessons: 16,
       completedLessons: 13,
-      image: 'https://thedigitaladda.com/wp-content/uploads/Ethical-Hacking-Course-Training-in-Jalandhar.png',
-      nextLesson: 'MERN Stack',
+      image:
+        "https://thedigitaladda.com/wp-content/uploads/Ethical-Hacking-Course-Training-in-Jalandhar.png",
+      nextLesson: "MERN Stack",
+      screenName: "CourseDetails",
     },
   ];
 
   // Featured categories
   const categories = [
-    { id: '1', name: 'Astrophysics', icon: 'telescope', courses: 45, color: '#FF6B6B' },
-    { id: '2', name: 'Space Tech', icon: 'rocket', courses: 32, color: '#4ECDC4' },
-    { id: '3', name: 'Astronomy', icon: 'planet', courses: 28, color: '#45B7D1' },
-    { id: '4', name: 'Cosmology', icon: 'infinite', courses: 19, color: '#96CEB4' },
+    {
+      id: "1",
+      name: "Astrophysics",
+      icon: "telescope",
+      courses: 45,
+      color: "#FF6B6B",
+    },
+    {
+      id: "2",
+      name: "Space Tech",
+      icon: "rocket",
+      courses: 32,
+      color: "#4ECDC4",
+    },
+    {
+      id: "3",
+      name: "Astronomy",
+      icon: "planet",
+      courses: 28,
+      color: "#45B7D1",
+    },
+    {
+      id: "4",
+      name: "Cosmology",
+      icon: "infinite",
+      courses: 19,
+      color: "#96CEB4",
+    },
   ];
 
-  // Sidebar navigation options - Updated Profile navigation
+  // Analysis data
+  const analysisData = [
+    {
+      id: "1",
+      title: "Learning Progress",
+      value: "75%",
+      change: "+12%",
+      icon: "trending-up",
+      color: "#4CAF50",
+      description: "This month",
+    },
+    {
+      id: "2",
+      title: "Courses Completed",
+      value: "8",
+      change: "+3",
+      icon: "checkmark-circle",
+      color: "#2196F3",
+      description: "This quarter",
+    },
+    {
+      id: "3",
+      title: "Study Hours",
+      value: "124h",
+      change: "+28h",
+      icon: "time",
+      color: "#FF9800",
+      description: "This month",
+    },
+    {
+      id: "4",
+      title: "Certificates Earned",
+      value: "5",
+      change: "+2",
+      icon: "trophy",
+      color: "#9C27B0",
+      description: "This quarter",
+    },
+  ];
+
+  // Updated sidebar navigation options with proper Analytics navigation
   const sidebarOptions = [
-    { name: 'My Courses', screen: 'MyCourses', icon: 'book' },
-    { name: 'Profile', screen: 'Profile', icon: 'person' },
-    { name: 'Events', screen: 'Events', icon: 'calendar' },
-    { name: 'Certificates', screen: 'Certificates', icon: 'trophy' },
-    { name: 'Notifications', screen: 'Notifications', icon: 'notifications' },
-    { name: 'Settings', screen: 'Settings', icon: 'settings' },
+    { name: "My Courses", screen: "MyCourses", icon: "book" },
+    { name: "Analytics", screen: "Analytics", icon: "analytics" },
+    { name: "Events", screen: "Events", icon: "calendar" },
+    { name: "Certificates", screen: "Certificates", icon: "trophy" },
+    { name: "Notifications", screen: "Notifications", icon: "notifications" },
+    { name: "Settings", screen: "Settings", icon: "settings" },
   ];
 
   const colors = {
-    primary: '#0B3D91',
-    secondary: '#FC3D21',
-    accent: '#00e6e6',
-    background: '#0A0A1A',
-    cardBackground: '#1A1A2E',
-    text: '#FFFFFF',
-    textSecondary: '#B0B0B0',
-    success: '#4CAF50',
-    warning: '#FF9800',
+    primary: "#0B3D91",
+    secondary: "#FC3D21",
+    accent: "#00e6e6",
+    background: "#0A0A1A",
+    cardBackground: "#1A1A2E",
+    text: "#FFFFFF",
+    textSecondary: "#B0B0B0",
+    success: "#4CAF50",
+    warning: "#FF9800",
   };
 
   const getDifficultyColor = (difficulty) => {
     switch (difficulty) {
-      case 'Beginner': return '#4CAF50';
-      case 'Intermediate': return '#FF9800';
-      case 'Advanced': return '#F44336';
-      default: return colors.accent;
+      case "Beginner":
+        return "#4CAF50";
+      case "Intermediate":
+        return "#FF9800";
+      case "Advanced":
+        return "#F44336";
+      default:
+        return colors.accent;
     }
   };
 
   const renderRecommendedCourse = ({ item }) => (
     <TouchableOpacity
-      style={[styles.recommendedCourseCard, { backgroundColor: colors.cardBackground }]}
-      onPress={() => navigation.navigate('CourseDetails', { courseId: item.id })}
+      style={[
+        styles.recommendedCourseCard,
+        { backgroundColor: colors.cardBackground },
+      ]}
+      onPress={() =>
+        navigation.navigate(item.screenName || "CourseDetails", {
+          courseId: item.id,
+        })
+      }
     >
       <Image source={{ uri: item.image }} style={styles.courseImage} />
 
       {/* Difficulty Badge */}
-      <View style={[styles.difficultyBadge, { backgroundColor: getDifficultyColor(item.difficulty) }]}>
+      <View
+        style={[
+          styles.difficultyBadge,
+          { backgroundColor: getDifficultyColor(item.difficulty) },
+        ]}
+      >
         <Text style={styles.difficultyText}>{item.difficulty}</Text>
       </View>
 
       <View style={styles.courseContent}>
-        <Text style={[styles.courseTitle, { color: colors.text }]} numberOfLines={2}>{item.title}</Text>
-        <Text style={[styles.instructorName, { color: colors.textSecondary }]}>{item.instructor}</Text>
+        <Text style={[styles.courseTitle, { color: colors.text }]}>
+          {item.title}
+        </Text>
+        <Text
+          style={[styles.courseInstructor, { color: colors.textSecondary }]}
+        >
+          By {item.instructor}
+        </Text>
 
-        <View style={styles.courseMetrics}>
-          <View style={styles.ratingContainer}>
-            <Ionicons name="star" size={14} color="#FFD700" />
-            <Text style={[styles.ratingText, { color: colors.text }]}>{item.rating}</Text>
-            <Text style={[styles.studentsText, { color: colors.textSecondary }]}>({item.students})</Text>
+        <View style={styles.courseStats}>
+          <View style={styles.statItem}>
+            <Ionicons name="time" size={14} color={colors.accent} />
+            <Text style={[styles.statText, { color: colors.textSecondary }]}>
+              {item.duration}
+            </Text>
+          </View>
+          <View style={styles.statItem}>
+            <Ionicons name="people" size={14} color={colors.accent} />
+            <Text style={[styles.statText, { color: colors.textSecondary }]}>
+              {item.students}
+            </Text>
           </View>
         </View>
 
-        <View style={styles.courseFooter}>
-          <View style={styles.durationContainer}>
-            <Ionicons name="time" size={14} color={colors.accent} />
-            <Text style={[styles.durationText, { color: colors.accent }]}>{item.duration}</Text>
+        <View style={styles.ratingContainer}>
+          <View style={styles.rating}>
+            <Ionicons name="star" size={16} color="#FFD700" />
+            <Text style={[styles.ratingText, { color: colors.text }]}>
+              {item.rating}
+            </Text>
           </View>
-          <Text style={[styles.priceText, { color: colors.success }]}>{item.price}</Text>
+          <Text style={[styles.priceText, { color: colors.accent }]}>
+            {item.price}
+          </Text>
         </View>
       </View>
     </TouchableOpacity>
   );
 
+  // Fixed render function for ongoing courses with proper navigation
   const renderOngoingCourse = ({ item }) => (
     <TouchableOpacity
-      style={[styles.ongoingCourseCard, { backgroundColor: colors.cardBackground }]}
-      onPress={() => navigation.navigate('CourseDetails', { courseId: item.id })}
+      style={[
+        styles.ongoingCourseCard,
+        { backgroundColor: colors.cardBackground },
+      ]}
+      onPress={() => {
+        // Navigate to specific screen based on screenName property
+        if (item.screenName) {
+          navigation.navigate(item.screenName, { courseId: item.id });
+        } else {
+          navigation.navigate("CourseDetails", { courseId: item.id });
+        }
+      }}
     >
       <Image source={{ uri: item.image }} style={styles.ongoingCourseImage} />
-
       <View style={styles.ongoingCourseContent}>
-        <Text style={[styles.ongoingCourseTitle, { color: colors.text }]} numberOfLines={2}>{item.title}</Text>
-        <Text style={[styles.ongoingInstructor, { color: colors.textSecondary }]}>{item.instructor}</Text>
+        <Text style={[styles.ongoingCourseTitle, { color: colors.text }]}>
+          {item.title}
+        </Text>
+        <Text
+          style={[
+            styles.ongoingCourseInstructor,
+            { color: colors.textSecondary },
+          ]}
+        >
+          By {item.instructor}
+        </Text>
 
-        <View style={styles.progressSection}>
-          <View style={styles.progressHeader}>
-            <Text style={[styles.progressText, { color: colors.textSecondary }]}>
-              Progress: {item.completedLessons}/{item.totalLessons} lessons
-            </Text>
-            <Text style={[styles.progressPercentage, { color: colors.accent }]}>{item.progress}%</Text>
-          </View>
-
-          <View style={styles.progressBarContainer}>
-            <View
-              style={[
-                styles.progressBar,
-                {
-                  width: `${item.progress}%`,
-                  backgroundColor: item.progress > 70 ? colors.success : item.progress > 40 ? colors.warning : colors.accent
-                }
-              ]}
-            />
-          </View>
-
-          <Text style={[styles.nextLessonText, { color: colors.textSecondary }]}>
-            Next: {item.nextLesson}
+        <View style={styles.progressInfo}>
+          <Text style={[styles.progressText, { color: colors.textSecondary }]}>
+            {item.completedLessons}/{item.totalLessons} lessons
+          </Text>
+          <Text style={[styles.progressPercentage, { color: colors.accent }]}>
+            {item.progress}%
           </Text>
         </View>
+
+        <View style={styles.progressBarContainer}>
+          <View
+            style={[
+              styles.progressBar,
+              {
+                width: `${item.progress}%`, // Fixed template literal syntax
+                backgroundColor: colors.accent,
+              },
+            ]}
+          />
+        </View>
+
+        <Text style={[styles.nextLesson, { color: colors.textSecondary }]}>
+          Next: {item.nextLesson}
+        </Text>
       </View>
     </TouchableOpacity>
   );
@@ -205,100 +348,151 @@ const HomeScreen = () => {
   const renderCategory = ({ item }) => (
     <TouchableOpacity
       style={[styles.categoryCard, { backgroundColor: colors.cardBackground }]}
-      onPress={() => navigation.navigate('CategoryCourses', { categoryId: item.id })}
+      onPress={() =>
+        navigation.navigate("CategoryCourses", { categoryId: item.id })
+      }
     >
       <View style={[styles.categoryIcon, { backgroundColor: item.color }]}>
         <Ionicons name={item.icon} size={24} color="#FFFFFF" />
       </View>
-      <Text style={[styles.categoryName, { color: colors.text }]}>{item.name}</Text>
-      <Text style={[styles.categoryCount, { color: colors.textSecondary }]}>{item.courses} courses</Text>
+      <Text style={[styles.categoryName, { color: colors.text }]}>
+        {item.name}
+      </Text>
+      <Text style={[styles.coursesCount, { color: colors.textSecondary }]}>
+        {item.courses} courses
+      </Text>
     </TouchableOpacity>
   );
 
-  // Updated renderSidebarOption to handle ProfileScreen navigation
-  const renderSidebarOption = ({ item }) => (
+  const renderAnalysisCard = ({ item }) => (
     <TouchableOpacity
-      style={[styles.sidebarItem, { backgroundColor: colors.cardBackground }]}
+      style={[styles.analysisCard, { backgroundColor: colors.cardBackground }]}
+      onPress={() => navigation.navigate("Analytics")}
+    >
+      <View style={styles.analysisHeader}>
+        <View style={[styles.analysisIcon, { backgroundColor: item.color }]}>
+          <Ionicons name={item.icon} size={20} color="#FFFFFF" />
+        </View>
+        <Text style={[styles.changeText, { color: item.color }]}>
+          {item.change}
+        </Text>
+      </View>
+      <Text style={[styles.analysisValue, { color: colors.text }]}>
+        {item.value}
+      </Text>
+      <Text style={[styles.analysisTitle, { color: colors.textSecondary }]}>
+        {item.title}
+      </Text>
+    </TouchableOpacity>
+  );
+
+  const renderSidebarItem = ({ item }) => (
+    <TouchableOpacity
+      style={styles.sidebarItem}
       onPress={() => {
         setSidebarVisible(false);
-        // Navigate to the ProfileScreen
         navigation.navigate(item.screen);
       }}
     >
       <Ionicons name={item.icon} size={24} color={colors.accent} />
-      <Text style={[styles.sidebarText, { color: colors.text }]}>{item.name}</Text>
+      <Text style={[styles.sidebarItemText, { color: colors.text }]}>
+        {item.name}
+      </Text>
+      <Ionicons name="chevron-forward" size={20} color={colors.textSecondary} />
     </TouchableOpacity>
   );
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        {/* Header */}
-        <View style={styles.header}>
-          <TouchableOpacity
-            style={[styles.menuButton, { backgroundColor: colors.cardBackground }]}
-            onPress={() => setSidebarVisible(true)}
-          >
-            <Ionicons name="menu" size={24} color={colors.accent} />
-          </TouchableOpacity>
-          <View style={styles.headerCenter}>
-            <Text style={[styles.headerTitle, { color: colors.text }]}>Space Academy</Text>
-            <Text style={[styles.headerSubtitle, { color: colors.textSecondary }]}>Explore the Universe</Text>
-          </View>
-          <TouchableOpacity
-            style={styles.notificationButton}
-            onPress={() => navigation.navigate('Notifications')}
-          >
-            <Ionicons name="notifications-outline" size={24} color={colors.accent} />
-            <View style={styles.notificationBadge} />
-          </TouchableOpacity>
+    <SafeAreaView
+      style={[styles.container, { backgroundColor: colors.background }]}
+    >
+      {/* Header */}
+      <View style={styles.header}>
+        <TouchableOpacity
+          style={[
+            styles.menuButton,
+            { backgroundColor: colors.cardBackground },
+          ]}
+          onPress={() => setSidebarVisible(true)}
+        >
+          <Ionicons name="menu" size={24} color={colors.accent} />
+        </TouchableOpacity>
+        <View style={styles.headerCenter}>
+          <Text style={[styles.headerTitle, { color: colors.text }]}>
+            EduSpace
+          </Text>
+          <Text style={[styles.headerSubtitle, { color: colors.accent }]}>
+            Learn Beyond Limits
+          </Text>
         </View>
+        <TouchableOpacity
+          style={styles.profileButton}
+          onPress={() => navigation.navigate("Profile")}
+        >
+          <Ionicons name="person-circle" size={32} color={colors.accent} />
+        </TouchableOpacity>
+      </View>
 
+      <ScrollView showsVerticalScrollIndicator={false}>
         {/* Welcome Section */}
         <View style={styles.welcomeSection}>
-          <Text style={[styles.welcomeText, { color: colors.text }]}>Welcome back!</Text>
-          <Text style={[styles.welcomeSubtext, { color: colors.textSecondary }]}>
-            Ready to continue your cosmic journey?
+          <Text style={[styles.welcomeText, { color: colors.text }]}>
+            Welcome back, Explorer! 🚀
+          </Text>
+          <Text
+            style={[styles.welcomeSubtext, { color: colors.textSecondary }]}
+          >
+            Continue your journey through the cosmos of knowledge
           </Text>
         </View>
 
-        {/* Categories Section */}
-        <View style={styles.section}>
-          <Text style={[styles.sectionTitle, { color: colors.text }]}>Explore Categories</Text>
-          <FlatList
-            data={categories}
-            renderItem={renderCategory}
-            keyExtractor={(item) => item.id}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.categoriesList}
-          />
-        </View>
-
-        {/* Recommended Courses Section */}
+        {/* Quick Analytics */}
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
-            <Text style={[styles.sectionTitle, { color: colors.text }]}>Recommended Courses</Text>
-            <TouchableOpacity>
-              <Text style={[styles.seeAllText, { color: colors.accent }]}>See All</Text>
+            <Text style={[styles.sectionTitle, { color: colors.text }]}>
+              Your Progress
+            </Text>
+            <TouchableOpacity
+              onPress={() => navigation.navigate("Analytics")}
+              style={styles.viewAllButton}
+            >
+              <Text style={[styles.viewAllText, { color: colors.accent }]}>
+                View All
+              </Text>
+              <Ionicons
+                name="chevron-forward"
+                size={16}
+                color={colors.accent}
+              />
             </TouchableOpacity>
           </View>
-          <FlatList
-            data={recommendedCourses}
-            renderItem={renderRecommendedCourse}
-            keyExtractor={(item) => item.id}
+          <ScrollView
             horizontal
             showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.coursesList}
-          />
+            contentContainerStyle={styles.analysisScrollContainer}
+          >
+            {analysisData.map((item) => renderAnalysisCard({ item }))}
+          </ScrollView>
         </View>
 
-        {/* Ongoing Courses Section */}
+        {/* Ongoing Courses */}
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
-            <Text style={[styles.sectionTitle, { color: colors.text }]}>Continue Learning</Text>
-            <TouchableOpacity>
-              <Text style={[styles.seeAllText, { color: colors.accent }]}>See All</Text>
+            <Text style={[styles.sectionTitle, { color: colors.text }]}>
+              Continue Learning
+            </Text>
+            <TouchableOpacity
+              onPress={() => navigation.navigate("MyCourses")}
+              style={styles.viewAllButton}
+            >
+              <Text style={[styles.viewAllText, { color: colors.accent }]}>
+                View All
+              </Text>
+              <Ionicons
+                name="chevron-forward"
+                size={16}
+                color={colors.accent}
+              />
             </TouchableOpacity>
           </View>
           <FlatList
@@ -307,7 +501,53 @@ const HomeScreen = () => {
             keyExtractor={(item) => item.id}
             horizontal
             showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.coursesList}
+            contentContainerStyle={styles.horizontalList}
+          />
+        </View>
+
+        {/* Categories */}
+        <View style={styles.section}>
+          <Text style={[styles.sectionTitle, { color: colors.text }]}>
+            Explore Categories
+          </Text>
+          <FlatList
+            data={categories}
+            renderItem={renderCategory}
+            keyExtractor={(item) => item.id}
+            numColumns={2}
+            scrollEnabled={false}
+            columnWrapperStyle={styles.categoryRow}
+            contentContainerStyle={styles.categoriesGrid}
+          />
+        </View>
+
+        {/* Recommended Courses */}
+        <View style={styles.section}>
+          <View style={styles.sectionHeader}>
+            <Text style={[styles.sectionTitle, { color: colors.text }]}>
+              Recommended for You
+            </Text>
+            <TouchableOpacity
+              onPress={() => navigation.navigate("AllCourses")}
+              style={styles.viewAllButton}
+            >
+              <Text style={[styles.viewAllText, { color: colors.accent }]}>
+                View All
+              </Text>
+              <Ionicons
+                name="chevron-forward"
+                size={16}
+                color={colors.accent}
+              />
+            </TouchableOpacity>
+          </View>
+          <FlatList
+            data={recommendedCourses}
+            renderItem={renderRecommendedCourse}
+            keyExtractor={(item) => item.id}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.horizontalList}
           />
         </View>
 
@@ -318,30 +558,34 @@ const HomeScreen = () => {
       {/* Sidebar Modal */}
       <Modal
         visible={isSidebarVisible}
+        transparent
         animationType="slide"
-        transparent={true}
         onRequestClose={() => setSidebarVisible(false)}
       >
-        <View style={styles.sidebarContainer}>
-          <View style={[styles.sidebar, { backgroundColor: colors.cardBackground }]}>
+        <View style={styles.modalOverlay}>
+          <View
+            style={[styles.sidebar, { backgroundColor: colors.cardBackground }]}
+          >
             <View style={styles.sidebarHeader}>
-              <Text style={[styles.sidebarTitle, { color: colors.text }]}>Space Academy</Text>
+              <Text style={[styles.sidebarTitle, { color: colors.text }]}>
+                Navigation
+              </Text>
               <TouchableOpacity
-                style={styles.closeButton}
                 onPress={() => setSidebarVisible(false)}
+                style={styles.closeButton}
               >
                 <Ionicons name="close" size={24} color={colors.accent} />
               </TouchableOpacity>
             </View>
             <FlatList
               data={sidebarOptions}
-              renderItem={renderSidebarOption}
+              renderItem={renderSidebarItem}
               keyExtractor={(item) => item.name}
               style={styles.sidebarList}
             />
           </View>
           <TouchableOpacity
-            style={styles.sidebarOverlay}
+            style={styles.overlayTouchable}
             onPress={() => setSidebarVisible(false)}
           />
         </View>
@@ -355,9 +599,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     paddingHorizontal: 20,
     paddingTop: 10,
     paddingBottom: 20,
@@ -368,167 +612,123 @@ const styles = StyleSheet.create({
   },
   headerCenter: {
     flex: 1,
-    alignItems: 'center',
+    alignItems: "center",
   },
   headerTitle: {
-    fontSize: 22,
-    fontWeight: 'bold',
+    fontSize: 24,
+    fontWeight: "900",
+    letterSpacing: 1,
+    fontFamily: Platform.OS === "ios" ? "Futura-Medium" : "monospace",
   },
   headerSubtitle: {
     fontSize: 12,
     marginTop: 2,
+    fontWeight: "600",
+    letterSpacing: 1,
+    fontFamily: Platform.OS === "ios" ? "Futura" : "monospace",
   },
-  notificationButton: {
-    position: 'relative',
-    padding: 8, // Added padding for better touch area
-  },
-  notificationBadge: {
-    position: 'absolute',
-    top: 6, // Adjusted position due to padding
-    right: 6, // Adjusted position due to padding
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: '#FF4444',
+  profileButton: {
+    padding: 4,
   },
   welcomeSection: {
     paddingHorizontal: 20,
-    marginBottom: 20,
+    marginBottom: 30,
   },
   welcomeText: {
-    fontSize: 24,
-    fontWeight: 'bold',
+    fontSize: 26,
+    fontWeight: "bold",
+    marginBottom: 8,
   },
   welcomeSubtext: {
-    fontSize: 14,
-    marginTop: 4,
+    fontSize: 16,
+    lineHeight: 24,
   },
   section: {
     marginBottom: 30,
+    paddingLeft: 20,
   },
   sectionHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    marginBottom: 15,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingRight: 20,
+    marginBottom: 16,
   },
   sectionTitle: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
-  seeAllText: {
+  viewAllButton: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  viewAllText: {
     fontSize: 14,
-    fontWeight: '600',
+    fontWeight: "600",
+    marginRight: 4,
   },
-  categoriesList: {
-    paddingLeft: 20,
+  analysisScrollContainer: {
+    paddingRight: 20,
   },
-  categoryCard: {
-    alignItems: 'center',
-    padding: 20,
+  analysisCard: {
+    width: 140,
+    padding: 16,
     borderRadius: 16,
-    marginRight: 15,
-    minWidth: 100,
+    marginRight: 12,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
-  categoryIcon: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    justifyContent: 'center',
-    alignItems: 'center',
+  analysisHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     marginBottom: 12,
   },
-  categoryName: {
-    fontSize: 14,
-    fontWeight: '600',
+  analysisIcon: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  changeText: {
+    fontSize: 12,
+    fontWeight: "600",
+  },
+  analysisValue: {
+    fontSize: 20,
+    fontWeight: "bold",
     marginBottom: 4,
   },
-  categoryCount: {
+  analysisTitle: {
     fontSize: 12,
+    fontWeight: "500",
   },
-  coursesList: {
-    paddingLeft: 20,
-  },
-  recommendedCourseCard: {
-    width: 280,
-    borderRadius: 16,
-    marginRight: 20,
-    overflow: 'hidden',
-    position: 'relative',
-  },
-  courseImage: {
-    width: '100%',
-    height: 160,
-  },
-  difficultyBadge: {
-    position: 'absolute',
-    top: 12,
-    right: 12,
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 12,
-  },
-  difficultyText: {
-    color: '#FFFFFF',
-    fontSize: 10,
-    fontWeight: '600',
-  },
-  courseContent: {
-    padding: 16,
-  },
-  courseTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    marginBottom: 6,
-    lineHeight: 22,
-  },
-  instructorName: {
-    fontSize: 13,
-    marginBottom: 12,
-  },
-  courseMetrics: {
-    marginBottom: 12,
-  },
-  ratingContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  ratingText: {
-    fontSize: 13,
-    fontWeight: '600',
-    marginLeft: 4,
-  },
-  studentsText: {
-    fontSize: 12,
-    marginLeft: 4,
-  },
-  courseFooter: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  durationContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  durationText: {
-    fontSize: 12,
-    fontWeight: '500',
-    marginLeft: 4,
-  },
-  priceText: {
-    fontSize: 16,
-    fontWeight: 'bold',
+  horizontalList: {
+    paddingRight: 20,
   },
   ongoingCourseCard: {
-    width: 300,
+    width: 280,
     borderRadius: 16,
-    marginRight: 20,
-    overflow: 'hidden',
+    marginRight: 16,
+    overflow: "hidden",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   ongoingCourseImage: {
-    width: '100%',
+    width: "100%",
     height: 120,
   },
   ongoingCourseContent: {
@@ -536,89 +736,211 @@ const styles = StyleSheet.create({
   },
   ongoingCourseTitle: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 4,
   },
-  ongoingInstructor: {
-    fontSize: 13,
-    marginBottom: 16,
+  ongoingCourseInstructor: {
+    fontSize: 14,
+    marginBottom: 12,
   },
-  progressSection: {
-
-  },
-  progressHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+  progressInfo: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     marginBottom: 8,
   },
   progressText: {
     fontSize: 12,
   },
   progressPercentage: {
-    fontSize: 14,
-    fontWeight: 'bold',
+    fontSize: 12,
+    fontWeight: "bold",
   },
   progressBarContainer: {
-    height: 6,
-    backgroundColor: '#333',
-    borderRadius: 3,
-    marginBottom: 8,
+    height: 4,
+    backgroundColor: "#333",
+    borderRadius: 2,
+    marginBottom: 12,
   },
   progressBar: {
-    height: 6,
-    borderRadius: 3,
+    height: 4,
+    borderRadius: 2,
   },
-  nextLessonText: {
+  nextLesson: {
     fontSize: 12,
-    fontStyle: 'italic',
+    fontStyle: "italic",
+  },
+  categoriesGrid: {
+    paddingRight: 20,
+  },
+  categoryRow: {
+    justifyContent: "space-between",
+    marginBottom: 16,
+  },
+  categoryCard: {
+    width: (width - 60) / 2,
+    padding: 20,
+    borderRadius: 16,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  categoryIcon: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 12,
+  },
+  categoryName: {
+    fontSize: 16,
+    fontWeight: "600",
+    textAlign: "center",
+    marginBottom: 4,
+  },
+  coursesCount: {
+    fontSize: 12,
+    textAlign: "center",
+  },
+  recommendedCourseCard: {
+    width: 280,
+    borderRadius: 16,
+    marginRight: 16,
+    overflow: "hidden",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  courseImage: {
+    width: "100%",
+    height: 140,
+  },
+  difficultyBadge: {
+    position: "absolute",
+    top: 12,
+    right: 12,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 12,
+  },
+  difficultyText: {
+    color: "#FFFFFF",
+    fontSize: 10,
+    fontWeight: "600",
+  },
+  courseContent: {
+    padding: 16,
+  },
+  courseTitle: {
+    fontSize: 16,
+    fontWeight: "bold",
+    marginBottom: 4,
+    lineHeight: 20,
+  },
+  courseInstructor: {
+    fontSize: 14,
+    marginBottom: 12,
+  },
+  courseStats: {
+    flexDirection: "row",
+    marginBottom: 12,
+  },
+  statItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginRight: 16,
+  },
+  statText: {
+    fontSize: 12,
+    marginLeft: 4,
+  },
+  ratingContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  rating: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  ratingText: {
+    fontSize: 14,
+    fontWeight: "600",
+    marginLeft: 4,
+  },
+  priceText: {
+    fontSize: 16,
+    fontWeight: "bold",
   },
   bottomPadding: {
     height: 20,
   },
-  sidebarContainer: {
+  modalOverlay: {
     flex: 1,
-    flexDirection: 'row',
+    flexDirection: "row",
   },
   sidebar: {
-    width: '75%',
+    width: "75%",
+    height: "100%",
     paddingTop: 50,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 2,
+      height: 0,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  overlayTouchable: {
+    flex: 1,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   sidebarHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     paddingHorizontal: 20,
     paddingBottom: 20,
     borderBottomWidth: 1,
-    borderBottomColor: '#333',
+    borderBottomColor: "#333",
   },
   sidebarTitle: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   closeButton: {
-    padding: 8,
-  },
-  sidebarOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    padding: 4,
   },
   sidebarList: {
-    paddingHorizontal: 20,
+    flex: 1,
     paddingTop: 20,
   },
   sidebarItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 16,
-    borderRadius: 12,
-    marginBottom: 8,
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 20,
+    paddingVertical: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: "#333",
   },
-  sidebarText: {
-    marginLeft: 15,
+  sidebarItemText: {
+    flex: 1,
     fontSize: 16,
-    fontWeight: '500',
+    fontWeight: "500",
+    marginLeft: 16,
   },
 });
 
