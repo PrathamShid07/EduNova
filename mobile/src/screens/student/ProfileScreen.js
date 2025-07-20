@@ -1,306 +1,754 @@
 import React from "react";
 import {
-  ArrowLeft,
-  Settings,
-  Share2,
-  Award,
-  BookOpen,
-  Clock,
-  Users,
-  TrendingUp,
-  Calendar,
-  MapPin,
-  Star,
-} from "lucide-react";
+  ScrollView,
+  Modal,
+  Alert,
+  TouchableOpacity,
+  TextInput,
+  Switch,
+  Dimensions,
+} from "react-native";
+import styled from "styled-components/native";
+import { Ionicons } from "@expo/vector-icons";
 
-export default function ProfileScreen() {
-  const stats = [
-    {
-      label: "Courses Completed",
-      value: "8",
-      change: "+3",
-      color: "bg-blue-500",
-    },
-    {
-      label: "Study Hours",
-      value: "124h",
-      change: "+28h",
-      color: "bg-orange-500",
-    },
-    { label: "Certificates", value: "5", change: "+2", color: "bg-purple-500" },
-    {
-      label: "Learning Progress",
-      value: "75%",
-      change: "+12%",
-      color: "bg-green-500",
-    },
-  ];
+const { width } = Dimensions.get("window");
 
-  const recentActivities = [
-    {
-      title: "Completed Ethical Hacking Course",
-      subtitle: "Professional Course by Prof. Mathew",
-      date: "2 days ago",
-      progress: 100,
-      color: "bg-green-500",
-    },
-    {
-      title: "Started Data Analysis Fundamentals",
-      subtitle: "By Prof. Jones",
-      date: "1 week ago",
-      progress: 25,
-      color: "bg-blue-500",
-    },
-    {
-      title: "Earned Cyber Security Certificate",
-      subtitle: "Advanced Level Certification",
-      date: "2 weeks ago",
-      progress: 100,
-      color: "bg-purple-500",
-    },
-  ];
+const Container = styled.View`
+  flex: 1;
+  background-color: ${(props) => props.theme?.colors?.background || "#0A0A1A"};
+`;
 
-  const achievements = [
-    {
-      icon: Award,
-      title: "Fast Learner",
-      description: "Completed 3 courses in a month",
-    },
-    { icon: Star, title: "Top Performer", description: "95% average score" },
-    {
-      icon: TrendingUp,
-      title: "Consistent",
-      description: "30-day learning streak",
-    },
-  ];
+const Header = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  padding-top: 50px;
+  background-color: ${(props) =>
+    props.theme?.colors?.cardBackground || "#1A1A2E"};
+`;
+
+const HeaderLeft = styled.View`
+  flex-direction: row;
+  align-items: center;
+  flex: 1;
+`;
+
+const BackButton = styled.TouchableOpacity`
+  padding: 8px;
+  margin-right: 12px;
+  border-radius: 8px;
+`;
+
+const HeaderTitle = styled.Text`
+  font-size: 28px;
+  font-weight: bold;
+  color: ${(props) => props.theme?.colors?.text || "#FFFFFF"};
+`;
+
+const HeaderRight = styled.View`
+  flex-direction: row;
+  align-items: center;
+`;
+
+const EditButton = styled.TouchableOpacity`
+  background-color: ${(props) => props.theme?.colors?.accent || "#00E6E6"};
+  padding: 8px 16px;
+  border-radius: 20px;
+  flex-direction: row;
+  align-items: center;
+`;
+
+const EditButtonText = styled.Text`
+  color: ${(props) => props.theme?.colors?.background || "#0A0A1A"};
+  font-size: 14px;
+  font-weight: 600;
+  margin-left: 6px;
+`;
+
+const ProfileContent = styled.ScrollView`
+  flex: 1;
+  padding: 20px;
+`;
+
+// Profile Header Section
+const ProfileHeaderSection = styled.View`
+  align-items: center;
+  padding: 20px;
+  background-color: ${(props) =>
+    props.theme?.colors?.cardBackground || "#1A1A2E"};
+  border-radius: 20px;
+  margin-bottom: 20px;
+`;
+
+const AvatarContainer = styled.View`
+  position: relative;
+  margin-bottom: 16px;
+`;
+
+const Avatar = styled.View`
+  width: 120px;
+  height: 120px;
+  border-radius: 60px;
+  background-color: ${(props) => props.theme?.colors?.accent || "#00E6E6"};
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+`;
+
+const AvatarImage = styled.Image`
+  width: 120px;
+  height: 120px;
+  border-radius: 60px;
+`;
+
+const AvatarPlaceholder = styled.Text`
+  font-size: 48px;
+  font-weight: bold;
+  color: ${(props) => props.theme?.colors?.background || "#0A0A1A"};
+`;
+
+const EditAvatarButton = styled.TouchableOpacity`
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background-color: ${(props) => props.theme?.colors?.accent || "#00E6E6"};
+  border-radius: 20px;
+  padding: 8px;
+  border: 3px solid
+    ${(props) => props.theme?.colors?.cardBackground || "#1A1A2E"};
+`;
+
+const UserName = styled.Text`
+  font-size: 24px;
+  font-weight: bold;
+  color: ${(props) => props.theme?.colors?.text || "#FFFFFF"};
+  margin-bottom: 8px;
+`;
+
+const UserRole = styled.Text`
+  font-size: 16px;
+  color: ${(props) => props.theme?.colors?.accent || "#00E6E6"};
+  margin-bottom: 12px;
+`;
+
+const UserBio = styled.Text`
+  font-size: 14px;
+  color: ${(props) => props.theme?.colors?.textSecondary || "#B0B0B0"};
+  text-align: center;
+  line-height: 20px;
+`;
+
+// Stats Section
+const StatsSection = styled.View`
+  flex-direction: row;
+  background-color: ${(props) =>
+    props.theme?.colors?.cardBackground || "#1A1A2E"};
+  border-radius: 20px;
+  margin-bottom: 20px;
+  overflow: hidden;
+`;
+
+const StatItem = styled.View`
+  flex: 1;
+  padding: 20px;
+  align-items: center;
+  border-right-width: 1px;
+  border-right-color: rgba(255, 255, 255, 0.1);
+`;
+
+const StatNumber = styled.Text`
+  font-size: 24px;
+  font-weight: bold;
+  color: ${(props) => props.theme?.colors?.accent || "#00E6E6"};
+  margin-bottom: 4px;
+`;
+
+const StatLabel = styled.Text`
+  font-size: 12px;
+  color: ${(props) => props.theme?.colors?.textSecondary || "#B0B0B0"};
+  text-align: center;
+`;
+
+// Info Sections
+const InfoSection = styled.View`
+  background-color: ${(props) =>
+    props.theme?.colors?.cardBackground || "#1A1A2E"};
+  border-radius: 20px;
+  margin-bottom: 20px;
+  overflow: hidden;
+`;
+
+const SectionHeader = styled.View`
+  padding: 20px 20px 10px 20px;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+`;
+
+const SectionTitle = styled.Text`
+  font-size: 18px;
+  font-weight: bold;
+  color: ${(props) => props.theme?.colors?.text || "#FFFFFF"};
+`;
+
+const InfoItem = styled.View`
+  flex-direction: row;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom-width: 1px;
+  border-bottom-color: rgba(255, 255, 255, 0.05);
+`;
+
+const InfoItemContent = styled.View`
+  flex: 1;
+  margin-left: 16px;
+`;
+
+const InfoItemLabel = styled.Text`
+  font-size: 14px;
+  color: ${(props) => props.theme?.colors?.textSecondary || "#B0B0B0"};
+  margin-bottom: 4px;
+`;
+
+const InfoItemValue = styled.Text`
+  font-size: 16px;
+  color: ${(props) => props.theme?.colors?.text || "#FFFFFF"};
+  font-weight: 500;
+`;
+
+const SwitchContainer = styled.View`
+  margin-left: 12px;
+`;
+
+// Modal Styles
+const ModalContainer = styled.View`
+  flex: 1;
+  background-color: ${(props) => props.theme?.colors?.background || "#0A0A1A"};
+`;
+
+const ModalHeader = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  padding-top: 50px;
+  background-color: ${(props) =>
+    props.theme?.colors?.cardBackground || "#1A1A2E"};
+  border-bottom-width: 1px;
+  border-bottom-color: rgba(255, 255, 255, 0.1);
+`;
+
+const ModalTitle = styled.Text`
+  font-size: 20px;
+  font-weight: bold;
+  color: ${(props) => props.theme?.colors?.text || "#FFFFFF"};
+`;
+
+const ModalButton = styled.TouchableOpacity`
+  padding: 8px 16px;
+  border-radius: 8px;
+  background-color: ${(props) =>
+    props.primary ? props.theme?.colors?.accent || "#00E6E6" : "transparent"};
+  border: 1px solid
+    ${(props) =>
+      props.primary ? "transparent" : props.theme?.colors?.accent || "#00E6E6"};
+`;
+
+const ModalButtonText = styled.Text`
+  color: ${(props) =>
+    props.primary
+      ? props.theme?.colors?.background || "#0A0A1A"
+      : props.theme?.colors?.accent || "#00E6E6"};
+  font-weight: 600;
+  font-size: 14px;
+`;
+
+const FormContainer = styled.ScrollView`
+  flex: 1;
+  padding: 20px;
+`;
+
+const FormGroup = styled.View`
+  margin-bottom: 24px;
+`;
+
+const FormLabel = styled.Text`
+  font-size: 16px;
+  font-weight: 600;
+  color: ${(props) => props.theme?.colors?.text || "#FFFFFF"};
+  margin-bottom: 8px;
+`;
+
+const FormInput = styled.TextInput`
+  background-color: ${(props) =>
+    props.theme?.colors?.cardBackground || "#1A1A2E"};
+  border-radius: 12px;
+  padding: 16px;
+  font-size: 16px;
+  color: ${(props) => props.theme?.colors?.text || "#FFFFFF"};
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  min-height: ${(props) => (props.multiline ? "120px" : "50px")};
+`;
+
+const FormRow = styled.View`
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  background-color: ${(props) =>
+    props.theme?.colors?.cardBackground || "#1A1A2E"};
+  border-radius: 12px;
+  margin-bottom: 16px;
+`;
+
+const FormRowLabel = styled.Text`
+  font-size: 16px;
+  color: ${(props) => props.theme?.colors?.text || "#FFFFFF"};
+  flex: 1;
+`;
+
+// Loading Spinner
+const LoadingContainer = styled.View`
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  background-color: ${(props) => props.theme?.colors?.background || "#0A0A1A"};
+`;
+
+const LoadingText = styled.Text`
+  color: ${(props) => props.theme?.colors?.text || "#FFFFFF"};
+  font-size: 16px;
+  margin-top: 16px;
+`;
+
+const LoadingSpinner = ({ message = "Loading profile..." }) => {
+  const [rotation, setRotation] = React.useState(0);
+
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      setRotation((prev) => (prev + 45) % 360);
+    }, 200);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white">
-      {/* Header */}
-      <div className="sticky top-0 z-10 bg-gray-900/95 backdrop-blur-sm border-b border-gray-800">
-        <div className="flex items-center justify-between p-4">
-          <div className="flex items-center space-x-3">
-            <button className="p-2 hover:bg-gray-800 rounded-lg transition-colors">
-              <ArrowLeft size={20} />
-            </button>
-            <h1 className="text-xl font-bold">Profile</h1>
-          </div>
-          <div className="flex items-center space-x-2">
-            <button className="p-2 hover:bg-gray-800 rounded-lg transition-colors">
-              <Share2 size={20} />
-            </button>
-            <button className="p-2 hover:bg-gray-800 rounded-lg transition-colors">
-              <Settings size={20} />
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Profile Header */}
-      <div className="relative px-4 pt-6">
-        <div className="relative rounded-3xl mb-6 overflow-hidden">
-          {/* Mountain landscape background */}
-          <div
-            className="h-80 bg-cover bg-center relative"
-            style={{
-              backgroundImage: `linear-gradient(135deg, rgba(0,0,0,0.4), rgba(0,0,0,0.6)), 
-                               linear-gradient(45deg, #4F46E5 0%, #7C3AED 25%, #EC4899 50%, #F59E0B 75%, #10B981 100%),
-                               radial-gradient(circle at 30% 70%, #1E293B 0%, #334155 40%, #64748B 100%)`,
-            }}
-          >
-            {/* Mountain silhouette overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-transparent to-transparent"></div>
-
-            {/* Top icons */}
-            <div className="absolute top-4 left-4 right-4 flex justify-between items-center">
-              <div className="w-10 h-10 bg-black/20 backdrop-blur-sm rounded-full flex items-center justify-center">
-                <Share2 size={20} className="text-white" />
-              </div>
-              <div className="w-10 h-10 bg-black/20 backdrop-blur-sm rounded-full flex items-center justify-center">
-                <Settings size={20} className="text-white" />
-              </div>
-            </div>
-
-            {/* Profile Image - Centered */}
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-white/20 backdrop-blur-sm bg-white/10">
-                <img
-                  src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face"
-                  alt="Christian Slater"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            </div>
-
-            {/* User info at bottom */}
-            <div className="absolute bottom-0 left-0 right-0 p-6 text-center">
-              <h2 className="text-3xl font-bold text-white mb-1">
-                Christian Slater
-              </h2>
-              <div className="flex items-center justify-center text-white/80 text-lg">
-                <MapPin size={18} className="mr-2" />
-                <span>San Francisco, CA</span>
-              </div>
-            </div>
-
-            {/* Small profile pictures in corner */}
-            <div className="absolute bottom-6 left-6 flex -space-x-2">
-              <div className="w-8 h-8 rounded-full border-2 border-white overflow-hidden">
-                <img
-                  src="https://images.unsplash.com/photo-1494790108755-2616b612b64c?w=50&h=50&fit=crop&crop=face"
-                  alt="Friend 1"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <div className="w-8 h-8 rounded-full border-2 border-white overflow-hidden">
-                <img
-                  src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=50&h=50&fit=crop&crop=face"
-                  alt="Friend 2"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <div className="w-8 h-8 rounded-full border-2 border-white overflow-hidden">
-                <img
-                  src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=50&h=50&fit=crop&crop=face"
-                  alt="Friend 3"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <div className="w-8 h-8 rounded-full border-2 border-white bg-white/20 backdrop-blur-sm flex items-center justify-center">
-                <Users size={14} className="text-white" />
-              </div>
-            </div>
-          </div>
-
-          {/* Stats section - white background */}
-          <div className="bg-white rounded-b-3xl px-6 py-4">
-            <div className="grid grid-cols-3 gap-4">
-              <div className="text-center">
-                <div className="text-2xl font-bold text-gray-900">1,250</div>
-                <div className="text-gray-500 text-sm">Activities</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-gray-900">239</div>
-                <div className="text-gray-500 text-sm">Experiences</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-gray-900">125</div>
-                <div className="text-gray-500 text-sm">Followers</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Stats Grid */}
-      <div className="px-4 mb-6">
-        <h3 className="text-lg font-semibold mb-4">Performance Overview</h3>
-        <div className="grid grid-cols-2 gap-3">
-          {stats.map((stat, index) => (
-            <div
-              key={index}
-              className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-4 border border-gray-700/50"
-            >
-              <div
-                className={`w-10 h-10 ${stat.color} rounded-xl flex items-center justify-center mb-3`}
-              >
-                {stat.label.includes("Courses") && <BookOpen size={20} />}
-                {stat.label.includes("Hours") && <Clock size={20} />}
-                {stat.label.includes("Certificates") && <Award size={20} />}
-                {stat.label.includes("Progress") && <TrendingUp size={20} />}
-              </div>
-              <div className="text-2xl font-bold text-white mb-1">
-                {stat.value}
-              </div>
-              <div className="text-sm text-gray-400 mb-1">{stat.label}</div>
-              <div className="text-xs text-green-400">{stat.change}</div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Achievements */}
-      <div className="px-4 mb-6">
-        <h3 className="text-lg font-semibold mb-4">Achievements</h3>
-        <div className="space-y-3">
-          {achievements.map((achievement, index) => {
-            const Icon = achievement.icon;
-            return (
-              <div
-                key={index}
-                className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-4 border border-gray-700/50 flex items-center space-x-4"
-              >
-                <div className="w-12 h-12 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-xl flex items-center justify-center">
-                  <Icon size={20} className="text-white" />
-                </div>
-                <div className="flex-1">
-                  <div className="font-semibold text-white">
-                    {achievement.title}
-                  </div>
-                  <div className="text-sm text-gray-400">
-                    {achievement.description}
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* Recent Activities */}
-      <div className="px-4 mb-6">
-        <h3 className="text-lg font-semibold mb-4">Recent Activities</h3>
-        <div className="space-y-3">
-          {recentActivities.map((activity, index) => (
-            <div
-              key={index}
-              className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-4 border border-gray-700/50"
-            >
-              <div className="flex items-start space-x-4">
-                <div
-                  className={`w-12 h-12 ${activity.color} rounded-xl flex items-center justify-center flex-shrink-0`}
-                >
-                  <BookOpen size={20} className="text-white" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="font-semibold text-white mb-1">
-                    {activity.title}
-                  </div>
-                  <div className="text-sm text-gray-400 mb-2">
-                    {activity.subtitle}
-                  </div>
-                  <div className="text-xs text-gray-500 mb-2">
-                    {activity.date}
-                  </div>
-
-                  {/* Progress Bar */}
-                  <div className="w-full bg-gray-700 rounded-full h-2">
-                    <div
-                      className={`h-2 rounded-full ${activity.color}`}
-                      style={{ width: `${activity.progress}%` }}
-                    ></div>
-                  </div>
-                  <div className="text-xs text-gray-400 mt-1">
-                    {activity.progress}% Complete
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Action Buttons */}
-      <div className="px-4 pb-6">
-        <div className="grid grid-cols-2 gap-3">
-          <button className="bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold py-4 px-6 rounded-2xl transition-all duration-200 hover:shadow-lg hover:shadow-blue-500/25">
-            View All Courses
-          </button>
-          <button className="bg-gray-800 text-white font-semibold py-4 px-6 rounded-2xl border border-gray-700 transition-all duration-200 hover:bg-gray-700">
-            Edit Profile
-          </button>
-        </div>
-      </div>
-    </div>
+    <LoadingContainer>
+      <Ionicons
+        name="refresh"
+        size={32}
+        color="#00E6E6"
+        style={{ transform: [{ rotate: `${rotation}deg` }] }}
+      />
+      <LoadingText>{message}</LoadingText>
+    </LoadingContainer>
   );
-}
+};
+
+const ProfileScreen = ({ navigation, route }) => {
+  // Profile data state
+  const [profile, setProfile] = React.useState({
+    id: "1",
+    name: "Alex Johnson",
+    email: "alex.johnson@example.com",
+    phone: "+1 (555) 123-4567",
+    role: "Space Enthusiast",
+    bio: "Passionate about space exploration and astronomy. Love attending workshops and connecting with fellow space enthusiasts.",
+    location: "San Francisco, CA",
+    website: "www.alexjohnson.dev",
+    joinDate: "2023-01-15",
+    avatar: null, // Set to null to show placeholder
+    // Stats
+    eventsAttended: 24,
+    eventsCreated: 7,
+    followers: 156,
+    // Settings
+    notifications: true,
+    publicProfile: true,
+    emailUpdates: false,
+  });
+
+  const [loading, setLoading] = React.useState(false);
+  const [isEditModalVisible, setEditModalVisible] = React.useState(false);
+  const [editForm, setEditForm] = React.useState({});
+  const [saving, setSaving] = React.useState(false);
+
+  // Initialize edit form when modal opens
+  React.useEffect(() => {
+    if (isEditModalVisible) {
+      setEditForm({ ...profile });
+    }
+  }, [isEditModalVisible, profile]);
+
+  const handleBackPress = () => {
+    if (navigation?.canGoBack()) {
+      navigation.goBack();
+    } else {
+      // Fallback for when navigation is not available or no previous screen
+      console.log("No previous screen to go back to");
+    }
+  };
+
+  const handleEditProfile = () => {
+    setEditModalVisible(true);
+  };
+
+  const handleSaveProfile = async () => {
+    setSaving(true);
+    try {
+      // Simulate API call
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+      setProfile({ ...editForm });
+      setEditModalVisible(false);
+      Alert.alert("Success", "Profile updated successfully!");
+    } catch (error) {
+      Alert.alert("Error", "Failed to update profile");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleChangeAvatar = () => {
+    Alert.alert("Change Avatar", "Choose an option", [
+      { text: "Camera", onPress: () => console.log("Camera selected") },
+      { text: "Gallery", onPress: () => console.log("Gallery selected") },
+      { text: "Cancel", style: "cancel" },
+    ]);
+  };
+
+  const updateFormField = (field, value) => {
+    setEditForm((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const formatJoinDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+    });
+  };
+
+  const getInitials = (name) => {
+    return name
+      .split(" ")
+      .map((word) => word[0])
+      .join("")
+      .toUpperCase();
+  };
+
+  if (loading) return <LoadingSpinner />;
+
+  return (
+    <Container>
+      <Header>
+        <HeaderLeft>
+          <BackButton onPress={handleBackPress}>
+            <Ionicons name="chevron-back" size={24} color="#FFFFFF" />
+          </BackButton>
+          <HeaderTitle>Profile</HeaderTitle>
+        </HeaderLeft>
+        <HeaderRight>
+          <EditButton onPress={handleEditProfile}>
+            <Ionicons name="pencil" size={16} color="#0A0A1A" />
+            <EditButtonText>Edit</EditButtonText>
+          </EditButton>
+        </HeaderRight>
+      </Header>
+
+      <ProfileContent showsVerticalScrollIndicator={false}>
+        {/* Profile Header */}
+        <ProfileHeaderSection>
+          <AvatarContainer>
+            <Avatar>
+              {profile.avatar ? (
+                <AvatarImage source={{ uri: profile.avatar }} />
+              ) : (
+                <AvatarPlaceholder>
+                  {getInitials(profile.name)}
+                </AvatarPlaceholder>
+              )}
+            </Avatar>
+            <EditAvatarButton onPress={handleChangeAvatar}>
+              <Ionicons name="camera" size={16} color="#0A0A1A" />
+            </EditAvatarButton>
+          </AvatarContainer>
+
+          <UserName>{profile.name}</UserName>
+          <UserRole>{profile.role}</UserRole>
+          <UserBio>{profile.bio}</UserBio>
+        </ProfileHeaderSection>
+
+        {/* Stats Section */}
+        <StatsSection>
+          <StatItem>
+            <StatNumber>{profile.eventsAttended}</StatNumber>
+            <StatLabel>Events{"\n"}Attended</StatLabel>
+          </StatItem>
+          <StatItem>
+            <StatNumber>{profile.eventsCreated}</StatNumber>
+            <StatLabel>Events{"\n"}Created</StatLabel>
+          </StatItem>
+          <StatItem style={{ borderRightWidth: 0 }}>
+            <StatNumber>{profile.followers}</StatNumber>
+            <StatLabel>Followers</StatLabel>
+          </StatItem>
+        </StatsSection>
+
+        {/* Personal Information */}
+        <InfoSection>
+          <SectionHeader>
+            <SectionTitle>Personal Information</SectionTitle>
+          </SectionHeader>
+
+          <InfoItem>
+            <Ionicons name="mail-outline" size={20} color="#00E6E6" />
+            <InfoItemContent>
+              <InfoItemLabel>Email</InfoItemLabel>
+              <InfoItemValue>{profile.email}</InfoItemValue>
+            </InfoItemContent>
+          </InfoItem>
+
+          <InfoItem>
+            <Ionicons name="call-outline" size={20} color="#00E6E6" />
+            <InfoItemContent>
+              <InfoItemLabel>Phone</InfoItemLabel>
+              <InfoItemValue>{profile.phone}</InfoItemValue>
+            </InfoItemContent>
+          </InfoItem>
+
+          <InfoItem>
+            <Ionicons name="location-outline" size={20} color="#00E6E6" />
+            <InfoItemContent>
+              <InfoItemLabel>Location</InfoItemLabel>
+              <InfoItemValue>{profile.location}</InfoItemValue>
+            </InfoItemContent>
+          </InfoItem>
+
+          <InfoItem>
+            <Ionicons name="globe-outline" size={20} color="#00E6E6" />
+            <InfoItemContent>
+              <InfoItemLabel>Website</InfoItemLabel>
+              <InfoItemValue>{profile.website}</InfoItemValue>
+            </InfoItemContent>
+          </InfoItem>
+
+          <InfoItem style={{ borderBottomWidth: 0 }}>
+            <Ionicons name="calendar-outline" size={20} color="#00E6E6" />
+            <InfoItemContent>
+              <InfoItemLabel>Member Since</InfoItemLabel>
+              <InfoItemValue>{formatJoinDate(profile.joinDate)}</InfoItemValue>
+            </InfoItemContent>
+          </InfoItem>
+        </InfoSection>
+
+        {/* Settings */}
+        <InfoSection>
+          <SectionHeader>
+            <SectionTitle>Settings</SectionTitle>
+          </SectionHeader>
+
+          <InfoItem>
+            <Ionicons name="notifications-outline" size={20} color="#00E6E6" />
+            <InfoItemContent>
+              <InfoItemLabel>Push Notifications</InfoItemLabel>
+              <InfoItemValue>Stay updated with latest events</InfoItemValue>
+            </InfoItemContent>
+            <SwitchContainer>
+              <Switch
+                value={profile.notifications}
+                onValueChange={(value) =>
+                  setProfile((prev) => ({ ...prev, notifications: value }))
+                }
+                trackColor={{ false: "#767577", true: "#00E6E6" }}
+                thumbColor={profile.notifications ? "#0A0A1A" : "#f4f3f4"}
+              />
+            </SwitchContainer>
+          </InfoItem>
+
+          <InfoItem>
+            <Ionicons name="eye-outline" size={20} color="#00E6E6" />
+            <InfoItemContent>
+              <InfoItemLabel>Public Profile</InfoItemLabel>
+              <InfoItemValue>Allow others to view your profile</InfoItemValue>
+            </InfoItemContent>
+            <SwitchContainer>
+              <Switch
+                value={profile.publicProfile}
+                onValueChange={(value) =>
+                  setProfile((prev) => ({ ...prev, publicProfile: value }))
+                }
+                trackColor={{ false: "#767577", true: "#00E6E6" }}
+                thumbColor={profile.publicProfile ? "#0A0A1A" : "#f4f3f4"}
+              />
+            </SwitchContainer>
+          </InfoItem>
+
+          <InfoItem style={{ borderBottomWidth: 0 }}>
+            <Ionicons name="mail-open-outline" size={20} color="#00E6E6" />
+            <InfoItemContent>
+              <InfoItemLabel>Email Updates</InfoItemLabel>
+              <InfoItemValue>Receive event updates via email</InfoItemValue>
+            </InfoItemContent>
+            <SwitchContainer>
+              <Switch
+                value={profile.emailUpdates}
+                onValueChange={(value) =>
+                  setProfile((prev) => ({ ...prev, emailUpdates: value }))
+                }
+                trackColor={{ false: "#767577", true: "#00E6E6" }}
+                thumbColor={profile.emailUpdates ? "#0A0A1A" : "#f4f3f4"}
+              />
+            </SwitchContainer>
+          </InfoItem>
+        </InfoSection>
+      </ProfileContent>
+
+      {/* Edit Profile Modal */}
+      <Modal
+        visible={isEditModalVisible}
+        animationType="slide"
+        transparent={false}
+        onRequestClose={() => setEditModalVisible(false)}
+      >
+        <ModalContainer>
+          <ModalHeader>
+            <ModalButton onPress={() => setEditModalVisible(false)}>
+              <ModalButtonText>Cancel</ModalButtonText>
+            </ModalButton>
+            <ModalTitle>Edit Profile</ModalTitle>
+            <ModalButton primary onPress={handleSaveProfile} disabled={saving}>
+              <ModalButtonText primary>
+                {saving ? "Saving..." : "Save"}
+              </ModalButtonText>
+            </ModalButton>
+          </ModalHeader>
+
+          {saving ? (
+            <LoadingSpinner message="Saving profile..." />
+          ) : (
+            <FormContainer>
+              <FormGroup>
+                <FormLabel>Full Name</FormLabel>
+                <FormInput
+                  value={editForm.name}
+                  onChangeText={(text) => updateFormField("name", text)}
+                  placeholder="Enter your full name"
+                  placeholderTextColor="#666"
+                />
+              </FormGroup>
+
+              <FormGroup>
+                <FormLabel>Role/Title</FormLabel>
+                <FormInput
+                  value={editForm.role}
+                  onChangeText={(text) => updateFormField("role", text)}
+                  placeholder="e.g. Space Enthusiast, Astronomer"
+                  placeholderTextColor="#666"
+                />
+              </FormGroup>
+
+              <FormGroup>
+                <FormLabel>Bio</FormLabel>
+                <FormInput
+                  value={editForm.bio}
+                  onChangeText={(text) => updateFormField("bio", text)}
+                  placeholder="Tell us about yourself..."
+                  placeholderTextColor="#666"
+                  multiline
+                  textAlignVertical="top"
+                />
+              </FormGroup>
+
+              <FormGroup>
+                <FormLabel>Email</FormLabel>
+                <FormInput
+                  value={editForm.email}
+                  onChangeText={(text) => updateFormField("email", text)}
+                  placeholder="your.email@example.com"
+                  placeholderTextColor="#666"
+                  keyboardType="email-address"
+                  autoCapitalize="none"
+                />
+              </FormGroup>
+
+              <FormGroup>
+                <FormLabel>Phone</FormLabel>
+                <FormInput
+                  value={editForm.phone}
+                  onChangeText={(text) => updateFormField("phone", text)}
+                  placeholder="+1 (555) 123-4567"
+                  placeholderTextColor="#666"
+                  keyboardType="phone-pad"
+                />
+              </FormGroup>
+
+              <FormGroup>
+                <FormLabel>Location</FormLabel>
+                <FormInput
+                  value={editForm.location}
+                  onChangeText={(text) => updateFormField("location", text)}
+                  placeholder="City, State/Country"
+                  placeholderTextColor="#666"
+                />
+              </FormGroup>
+
+              <FormGroup>
+                <FormLabel>Website</FormLabel>
+                <FormInput
+                  value={editForm.website}
+                  onChangeText={(text) => updateFormField("website", text)}
+                  placeholder="www.yourwebsite.com"
+                  placeholderTextColor="#666"
+                  keyboardType="url"
+                  autoCapitalize="none"
+                />
+              </FormGroup>
+
+              <FormGroup>
+                <FormLabel>Notification Settings</FormLabel>
+
+                <FormRow>
+                  <FormRowLabel>Push Notifications</FormRowLabel>
+                  <Switch
+                    value={editForm.notifications}
+                    onValueChange={(value) =>
+                      updateFormField("notifications", value)
+                    }
+                    trackColor={{ false: "#767577", true: "#00E6E6" }}
+                    thumbColor={editForm.notifications ? "#0A0A1A" : "#f4f3f4"}
+                  />
+                </FormRow>
+
+                <FormRow>
+                  <FormRowLabel>Public Profile</FormRowLabel>
+                  <Switch
+                    value={editForm.publicProfile}
+                    onValueChange={(value) =>
+                      updateFormField("publicProfile", value)
+                    }
+                    trackColor={{ false: "#767577", true: "#00E6E6" }}
+                    thumbColor={editForm.publicProfile ? "#0A0A1A" : "#f4f3f4"}
+                  />
+                </FormRow>
+
+                <FormRow>
+                  <FormRowLabel>Email Updates</FormRowLabel>
+                  <Switch
+                    value={editForm.emailUpdates}
+                    onValueChange={(value) =>
+                      updateFormField("emailUpdates", value)
+                    }
+                    trackColor={{ false: "#767577", true: "#00E6E6" }}
+                    thumbColor={editForm.emailUpdates ? "#0A0A1A" : "#f4f3f4"}
+                  />
+                </FormRow>
+              </FormGroup>
+            </FormContainer>
+          )}
+        </ModalContainer>
+      </Modal>
+    </Container>
+  );
+};
+
+export default ProfileScreen;

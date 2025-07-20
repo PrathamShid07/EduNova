@@ -431,7 +431,7 @@ const HomeScreen = () => {
         </TouchableOpacity>
         <View style={styles.headerCenter}>
           <Text style={[styles.headerTitle, { color: colors.text }]}>
-            EduSpace
+            EduNova
           </Text>
           <Text style={[styles.headerSubtitle, { color: colors.accent }]}>
             Learn Beyond Limits
