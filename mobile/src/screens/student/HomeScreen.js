@@ -21,7 +21,7 @@ const HomeScreen = () => {
   const navigation = useNavigation();
   const [isSidebarVisible, setSidebarVisible] = useState(false);
 
-  // Enhanced recommended courses with better visibility
+  // Enhanced recommended courses with better visibility and Data Science integration
   const recommendedCourses = [
     {
       id: "1",
@@ -51,7 +51,7 @@ const HomeScreen = () => {
     },
     {
       id: "3",
-      title: "Data Science",
+      title: "Data Science Mastery",
       instructor: "Prof. Mukesh",
       duration: "5 weeks",
       price: "$89",
@@ -59,7 +59,7 @@ const HomeScreen = () => {
       students: 920,
       image: "https://www.oxfordinstitute.in/img/data-science-course.jpg",
       difficulty: "Beginner",
-      screenName: "CourseDetails",
+      screenName: "DataScienceScreen", // Updated to navigate to DataScienceScreen
     },
     {
       id: "4",
@@ -72,7 +72,7 @@ const HomeScreen = () => {
       image:
         "https://img.evbuc.com/https%3A%2F%2Fcdn.evbuc.com%2Fimages%2F762927919%2F1221918410073%2F1%2Foriginal.20240508-193018?w=600&auto=format%2Ccompress&q=75&sharp=10&rect=0%2C44%2C1400%2C700&s=5f04da72028e4f9ac261f7619443b6ea",
       difficulty: "Advanced",
-      screenName: "CourseDetails",
+      screenName: "DataScienceScreen", // Navigate to Data Science section
     },
   ];
 
@@ -88,7 +88,7 @@ const HomeScreen = () => {
       image:
         "https://media.licdn.com/dms/image/v2/D4D12AQF7A0bqGYMj0A/article-cover_image-shrink_720_1280/article-cover_image-shrink_720_1280/0/1733136423495?e=2147483647&v=beta&t=GnQ8yuIoj6U5PB0Ib9BekWLUGgZoOafcfBMpeJH8ZE8",
       nextLesson: "Data Analytics",
-      screenName: "CybersecurityScreen", // This is the key fix
+      screenName: "CybersecurityScreen",
     },
     {
       id: "6",
@@ -100,7 +100,7 @@ const HomeScreen = () => {
       image:
         "https://www.oxfordinstitute.in/img/all-software-development/data-analayes.jpg",
       nextLesson: "Business Management",
-      screenName: "CourseDetails",
+      screenName: "DataScienceScreen", // Navigate to Data Science section
     },
     {
       id: "7",
@@ -116,14 +116,15 @@ const HomeScreen = () => {
     },
   ];
 
-  // Featured categories
+  // Updated categories with Data Science category
   const categories = [
     {
       id: "1",
-      name: "Astrophysics",
-      icon: "telescope",
+      name: "Data Science",
+      icon: "bar-chart",
       courses: 45,
       color: "#FF6B6B",
+      screenName: "DataScienceScreen", // Navigate to Data Science screen
     },
     {
       id: "2",
@@ -131,6 +132,7 @@ const HomeScreen = () => {
       icon: "rocket",
       courses: 32,
       color: "#4ECDC4",
+      screenName: "CategoryCourses",
     },
     {
       id: "3",
@@ -138,13 +140,15 @@ const HomeScreen = () => {
       icon: "planet",
       courses: 28,
       color: "#45B7D1",
+      screenName: "AstronomyScreen",
     },
     {
       id: "4",
-      name: "Cosmology",
-      icon: "infinite",
+      name: "Cybersecurity",
+      icon: "shield-checkmark",
       courses: 19,
       color: "#96CEB4",
+      screenName: "CybersecurityScreen",
     },
   ];
 
@@ -188,9 +192,10 @@ const HomeScreen = () => {
     },
   ];
 
-  // Updated sidebar navigation options with proper Analytics navigation
+  // Updated sidebar navigation options
   const sidebarOptions = [
     { name: "My Courses", screen: "MyCourses", icon: "book" },
+    { name: "Data Science", screen: "DataScienceScreen", icon: "bar-chart" },
     { name: "Analytics", screen: "Analytics", icon: "analytics" },
     { name: "Events", screen: "Events", icon: "calendar" },
     { name: "Certificates", screen: "Certificates", icon: "trophy" },
@@ -287,7 +292,6 @@ const HomeScreen = () => {
     </TouchableOpacity>
   );
 
-  // Fixed render function for ongoing courses with proper navigation
   const renderOngoingCourse = ({ item }) => (
     <TouchableOpacity
       style={[
@@ -295,7 +299,6 @@ const HomeScreen = () => {
         { backgroundColor: colors.cardBackground },
       ]}
       onPress={() => {
-        // Navigate to specific screen based on screenName property
         if (item.screenName) {
           navigation.navigate(item.screenName, { courseId: item.id });
         } else {
@@ -331,7 +334,7 @@ const HomeScreen = () => {
             style={[
               styles.progressBar,
               {
-                width: `${item.progress}%`, // Fixed template literal syntax
+                width: `${item.progress}%`,
                 backgroundColor: colors.accent,
               },
             ]}
@@ -348,9 +351,18 @@ const HomeScreen = () => {
   const renderCategory = ({ item }) => (
     <TouchableOpacity
       style={[styles.categoryCard, { backgroundColor: colors.cardBackground }]}
-      onPress={() =>
-        navigation.navigate("CategoryCourses", { categoryId: item.id })
-      }
+      onPress={() => {
+        // Updated navigation logic for Data Science
+        if (item.screenName === "DataScienceScreen") {
+          navigation.navigate("DataScienceScreen");
+        } else if (item.screenName === "AstronomyScreen") {
+          navigation.navigate("AstronomyScreen");
+        } else if (item.screenName === "CybersecurityScreen") {
+          navigation.navigate("CybersecurityScreen");
+        } else {
+          navigation.navigate("CategoryCourses", { categoryId: item.id });
+        }
+      }}
     >
       <View style={[styles.categoryIcon, { backgroundColor: item.color }]}>
         <Ionicons name={item.icon} size={24} color="#FFFFFF" />
@@ -549,6 +561,44 @@ const HomeScreen = () => {
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={styles.horizontalList}
           />
+        </View>
+
+        {/* Quick Access to Data Science */}
+        <View style={styles.section}>
+          <TouchableOpacity
+            style={[
+              styles.featureCard,
+              { backgroundColor: colors.cardBackground },
+            ]}
+            onPress={() => navigation.navigate("DataScienceScreen")}
+          >
+            <View style={styles.featureCardContent}>
+              <View
+                style={[styles.featureIcon, { backgroundColor: "#FF6B6B" }]}
+              >
+                <Ionicons name="bar-chart" size={32} color="#FFFFFF" />
+              </View>
+              <View style={styles.featureTextContent}>
+                <Text style={[styles.featureTitle, { color: colors.text }]}>
+                  Master Data Science
+                </Text>
+                <Text
+                  style={[
+                    styles.featureSubtitle,
+                    { color: colors.textSecondary },
+                  ]}
+                >
+                  Explore our comprehensive Data Science courses and learning
+                  paths
+                </Text>
+              </View>
+              <Ionicons
+                name="chevron-forward"
+                size={24}
+                color={colors.accent}
+              />
+            </View>
+          </TouchableOpacity>
         </View>
 
         {/* Bottom Padding */}
@@ -884,17 +934,56 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
   },
-  bottomPadding: {
-    height: 20,
+  // New styles for the Data Science feature card
+  // Add these styles to your existing StyleSheet.create() object in HomeScreen.js
+
+  // Feature Card Styles (add these to your existing styles object)
+  featureCard: {
+    borderRadius: 16,
+    padding: 20,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
+  featureCardContent: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  featureIcon: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    justifyContent: "center",
+    alignItems: "center",
+    marginRight: 16,
+  },
+  featureTextContent: {
+    flex: 1,
+  },
+  featureTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 4,
+  },
+  featureSubtitle: {
+    fontSize: 14,
+    lineHeight: 20,
+  },
+
+  // Sidebar Modal Styles (add these to your existing styles object)
   modalOverlay: {
     flex: 1,
     flexDirection: "row",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   sidebar: {
-    width: "75%",
-    height: "100%",
-    paddingTop: 50,
+    width: width * 0.75,
+    paddingTop: Platform.OS === "ios" ? 50 : 30,
     shadowColor: "#000",
     shadowOffset: {
       width: 2,
@@ -906,12 +995,11 @@ const styles = StyleSheet.create({
   },
   overlayTouchable: {
     flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   sidebarHeader: {
     flexDirection: "row",
-    justifyContent: "space-between",
     alignItems: "center",
+    justifyContent: "space-between",
     paddingHorizontal: 20,
     paddingBottom: 20,
     borderBottomWidth: 1,
@@ -922,7 +1010,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   closeButton: {
-    padding: 4,
+    padding: 8,
   },
   sidebarList: {
     flex: 1,
@@ -933,7 +1021,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: 20,
     paddingVertical: 16,
-    borderBottomWidth: 1,
+    borderBottomWidth: 0.5,
     borderBottomColor: "#333",
   },
   sidebarItemText: {
@@ -941,6 +1029,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "500",
     marginLeft: 16,
+  },
+
+  // Bottom Padding
+  bottomPadding: {
+    height: 40,
   },
 });
 

@@ -7,17 +7,13 @@ import {
   ScrollView,
   Image,
   SafeAreaView,
-  Dimensions,
   FlatList,
-  Platform,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
-const { width } = Dimensions.get("window");
-
 const CybersecurityScreen = ({ navigation }) => {
   const [selectedTab, setSelectedTab] = useState("overview");
-  const [isEnrolled, setIsEnrolled] = useState(true); // Set to true since user is already enrolled
+  const [isEnrolled] = useState(true); // Set to true since user is already enrolled
 
   const colors = {
     primary: "#0B3D91",
@@ -401,7 +397,7 @@ const CybersecurityScreen = ({ navigation }) => {
                 { color: colors.text, marginTop: 24 },
               ]}
             >
-              What You'll Learn
+              What You&apos;ll Learn
             </Text>
             {courseData.learningOutcomes.map((outcome, index) => (
               <View key={index} style={styles.outcomeItem}>
@@ -653,7 +649,7 @@ const CybersecurityScreen = ({ navigation }) => {
             {courseData.title}
           </Text>
           <Text
-            style={[styles.instructorName, { color: colors.textSecondary }]}
+            style={[styles.courseInstructor, { color: colors.textSecondary }]}
           >
             By {courseData.instructor}
           </Text>
@@ -864,7 +860,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 8,
   },
-  instructorName: {
+  courseInstructor: {
     fontSize: 16,
     marginBottom: 16,
   },
@@ -1074,7 +1070,7 @@ const styles = StyleSheet.create({
   reviewCard: {
     padding: 16,
     borderRadius: 12,
-    marginBottom: 12,
+    marginBottom: 16,
   },
   reviewHeader: {
     flexDirection: "row",
@@ -1088,7 +1084,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   avatar: {
-    fontSize: 24,
+    fontSize: 32,
     marginRight: 12,
   },
   reviewerName: {
@@ -1115,10 +1111,9 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    padding: 20,
-    paddingTop: 12,
-    borderTopWidth: 1,
-    borderTopColor: "#333",
+    paddingHorizontal: 20,
+    paddingVertical: 16,
+    paddingBottom: 34, // Account for safe area
   },
   continueButton: {
     flexDirection: "row",

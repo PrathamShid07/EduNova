@@ -4,11 +4,11 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  FlatList,
   SafeAreaView,
   ScrollView,
   Image,
   Share,
+  Alert,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
@@ -99,17 +99,49 @@ const CertificatesScreen = () => {
       });
     } catch (error) {
       console.log("Error sharing certificate:", error);
+      Alert.alert("Share Error", "Unable to share certificate at this time.");
     }
   };
 
   const handleDownloadCertificate = (certificate) => {
     // In a real app, this would trigger a download
     console.log("Downloading certificate:", certificate.certificateId);
-    // You could implement actual download functionality here
+    Alert.alert(
+      "Download",
+      "Certificate download functionality would be implemented here."
+    );
   };
 
-  const renderEarnedCertificate = ({ item }) => (
+  const handleContinueCourse = (courseId) => {
+    // Navigate to course details or check if the route exists
+    try {
+      navigation.navigate("CourseDetails", { courseId });
+    } catch (error) {
+      console.log("Navigation error:", error);
+      // Fallback navigation or show alert
+      Alert.alert("Navigation", "Course details screen is not available.");
+    }
+  };
+
+  const handleExploreCoursesNavigation = () => {
+    try {
+      // Try different navigation options that might exist in your app
+      if (navigation.canGoBack()) {
+        navigation.goBack();
+      } else {
+        // Try navigating to common screen names
+        navigation.navigate("Home");
+      }
+    } catch (error) {
+      console.log("Navigation error:", error);
+      // If navigation fails, just log it
+      Alert.alert("Navigation", "Unable to navigate to courses.");
+    }
+  };
+
+  const renderEarnedCertificate = (item) => (
     <View
+      key={item.id}
       style={[
         styles.certificateCard,
         { backgroundColor: colors.cardBackground },
@@ -119,6 +151,7 @@ const CertificatesScreen = () => {
         <Image
           source={{ uri: item.courseImage }}
           style={styles.certificateImage}
+          onError={() => console.log("Image load error for:", item.title)}
         />
         <View style={styles.certificateBadge}>
           <Ionicons name="trophy" size={16} color={colors.gold} />
@@ -204,8 +237,9 @@ const CertificatesScreen = () => {
     </View>
   );
 
-  const renderInProgressCertificate = ({ item }) => (
+  const renderInProgressCertificate = (item) => (
     <View
+      key={item.id}
       style={[
         styles.certificateCard,
         { backgroundColor: colors.cardBackground },
@@ -215,6 +249,7 @@ const CertificatesScreen = () => {
         <Image
           source={{ uri: item.courseImage }}
           style={styles.certificateImage}
+          onError={() => console.log("Image load error for:", item.title)}
         />
         <View
           style={[styles.certificateBadge, { backgroundColor: colors.warning }]}
@@ -279,9 +314,7 @@ const CertificatesScreen = () => {
 
         <TouchableOpacity
           style={[styles.continueButton, { backgroundColor: colors.accent }]}
-          onPress={() =>
-            navigation.navigate("CourseDetails", { courseId: item.id })
-          }
+          onPress={() => handleContinueCourse(item.id)}
         >
           <Text style={styles.continueButtonText}>Continue Course</Text>
           <Ionicons name="arrow-forward" size={16} color="#FFFFFF" />
@@ -307,7 +340,7 @@ const CertificatesScreen = () => {
       </Text>
       <TouchableOpacity
         style={[styles.exploreButton, { backgroundColor: colors.accent }]}
-        onPress={() => navigation.navigate("Home")}
+        onPress={handleExploreCoursesNavigation}
       >
         <Text style={styles.exploreButtonText}>Explore Courses</Text>
       </TouchableOpacity>
@@ -325,7 +358,13 @@ const CertificatesScreen = () => {
             styles.backButton,
             { backgroundColor: colors.cardBackground },
           ]}
-          onPress={() => navigation.goBack()}
+          onPress={() => {
+            try {
+              navigation.goBack();
+            } catch (error) {
+              console.log("Back navigation error:", error);
+            }
+          }}
         >
           <Ionicons name="arrow-back" size={24} color={colors.accent} />
         </TouchableOpacity>
@@ -397,32 +436,31 @@ const CertificatesScreen = () => {
         </TouchableOpacity>
       </View>
 
-      {/* Content */}
-      <View style={styles.content}>
+      {/* Content with ScrollView */}
+      <ScrollView
+        style={styles.content}
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+        bounces={true}
+      >
         {activeTab === "earned" ? (
           earnedCertificates.length > 0 ? (
-            <FlatList
-              data={earnedCertificates}
-              renderItem={renderEarnedCertificate}
-              keyExtractor={(item) => item.id}
-              showsVerticalScrollIndicator={false}
-              contentContainerStyle={styles.listContainer}
-            />
+            <View style={styles.certificatesContainer}>
+              {earnedCertificates.map((item) => renderEarnedCertificate(item))}
+            </View>
           ) : (
             renderEmptyState()
           )
         ) : inProgressCertificates.length > 0 ? (
-          <FlatList
-            data={inProgressCertificates}
-            renderItem={renderInProgressCertificate}
-            keyExtractor={(item) => item.id}
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={styles.listContainer}
-          />
+          <View style={styles.certificatesContainer}>
+            {inProgressCertificates.map((item) =>
+              renderInProgressCertificate(item)
+            )}
+          </View>
         ) : (
           renderEmptyState()
         )}
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -482,9 +520,13 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
   },
-  listContainer: {
+  scrollContent: {
     paddingHorizontal: 20,
     paddingBottom: 20,
+    flexGrow: 1,
+  },
+  certificatesContainer: {
+    flex: 1,
   },
   certificateCard: {
     borderRadius: 16,
@@ -611,6 +653,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     paddingHorizontal: 40,
+    minHeight: 400,
   },
   emptyStateTitle: {
     fontSize: 20,
